@@ -46,7 +46,7 @@ fun UserRegistrationScreen(){
         mutableStateOf(false)
     }
     var selectedCountry by remember {
-        mutableStateOf("Japan")
+        mutableStateOf("Vietnam")
     }
     var countryCode by remember {
         mutableStateOf("+84")
@@ -79,7 +79,7 @@ fun UserRegistrationScreen(){
             modifier = Modifier.padding(horizontal = 66.dp), thickness = 2.dp, color = colorResource(id = R.color.light_green)
         )
         DropdownMenu(expanded = expanded, onDismissRequest = {expanded = false}, modifier = Modifier.fillMaxWidth()) {
-            listOf("India", "USA", "VN").forEach {
+            listOf("India", "USA", "Japan", "Korea").forEach {
                 country ->
                 DropdownMenuItem(text = {Text(text = country)}, onClick = {
                     selectedCountry = country
