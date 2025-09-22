@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -54,16 +55,15 @@ fun UserRegistrationScreen(){
     var phoneNumber by remember {
         mutableStateOf("")
     }
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier.fillMaxSize().statusBarsPadding().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = "Enter your phone number", fontSize = 20.sp, color = colorResource(id = R.color.dark_green), fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(24.dp))
         Row {
             Text(text = "whatsApp will need to verify your phone number")
             Spacer(modifier = Modifier.width(4.dp))
-            Text(text = "what's", color = colorResource(id = R.color.dark_green))
 
         }
-        Text(text = "my number?", color = colorResource(id = R.color.dark_green))
+        Text(text = "what's my number?", color = colorResource(id = R.color.dark_green))
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(onClick = {expanded = true}, modifier = Modifier.fillMaxWidth()) {
             Box(modifier = Modifier.width(230.dp)){
@@ -98,6 +98,7 @@ fun UserRegistrationScreen(){
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = "Carrier charges may apply", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+            Spacer(modifier = Modifier.height(10.dp))
             Button(onClick = {}, shape = RoundedCornerShape(6.dp), colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.dark_green))) {
                 Text(text = "Next", fontSize = 16.sp)
             }

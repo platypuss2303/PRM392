@@ -1,6 +1,7 @@
 package com.example.whatsapp.presentation.welcomescreen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,15 +21,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.whatsapp.R
+import com.example.whatsapp.presentation.navigation.Routes
 
 @Composable
-@Preview(showSystemUi = true)
-fun WelcomeScreen(){
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+fun WelcomeScreen(navController: NavController){
+    Column(modifier = Modifier.fillMaxSize().background(Color.White), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Image(painter = painterResource(id = R.drawable.whatsapp_sticker), contentDescription = null, modifier = Modifier.size(300.dp))
         Text(text = "Welcome to WhatsApp", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(24.dp))
@@ -46,7 +47,7 @@ fun WelcomeScreen(){
             Text(text = "Term of Services", color = colorResource(id = R.color.light_green))
         }
         Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = {}, modifier = Modifier.size(280.dp, 43.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.dark_green))){
+        Button(onClick = {navController.navigate(Routes.UserRegistrationScreen)}, modifier = Modifier.size(280.dp, 43.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.dark_green))){
             Text(text = "Agree and Continue", fontSize = 16.sp)
         }
     }
