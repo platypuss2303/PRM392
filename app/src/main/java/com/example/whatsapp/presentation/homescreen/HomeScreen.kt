@@ -35,7 +35,12 @@ import com.example.whatsapp.presentation.chatbox.ChatDesignModel
 @Composable
 @Preview(showSystemUi = true)
 fun HomeScreen() {
-    val chatData = listOf(ChatDesignModel(image = R.drawable.salman_khan ,name = "Salman Khan", time = "10:00 AM", message = "Hello fenn !!" ))
+    val chatData = listOf(
+        ChatDesignModel(image = R.drawable.salman_khan ,name = "Salman Khan", time = "10:00 AM", message = "Hello fenn !!" ),
+        ChatDesignModel(image = R.drawable.disha_patani ,name = "Dia Patina", time = "7:00 AM", message = "Oi doi oi !!" ),
+        ChatDesignModel(image = R.drawable.rashmika ,name = "Mika", time = "11:00 AM", message = "Oi doi oi !!" ),
+        ChatDesignModel(image = R.drawable.mrbeast, name = "Mr.Beast", time = "9:00 PM", message = "Join with us ?!"))
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
