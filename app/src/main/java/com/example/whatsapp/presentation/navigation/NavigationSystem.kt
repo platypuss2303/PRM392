@@ -25,7 +25,7 @@ fun NavigationSystem(){
             HomeScreen()
         }
         composable<Routes.UserRegistrationScreen>{
-            UserRegistrationScreen()
+            UserRegistrationScreen(navController)
         }
         composable<Routes.CommunityScreen>{
             CommunityScreen()

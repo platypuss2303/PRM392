@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "245751774742",
+    "project_id": "social-chat-7f8ca",
+    "storage_bucket": "social-chat-7f8ca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245751774742:android:5a5f06ca5e1050b4deff37",
+        "android_client_info": {
+          "package_name": "com.example.whatsapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJyF_rWks7YOZamWTYidtdpJzAh_-8yhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
