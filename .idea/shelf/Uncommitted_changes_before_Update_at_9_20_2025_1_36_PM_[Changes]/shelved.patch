@@ -1,0 +1,66 @@
+Index: app/src/main/java/com/example/whatsapp/presentation/welcomescreen/WelcomeScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.whatsapp.presentation.welcomescreen\r\n\r\nimport androidx.compose.foundation.Image\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.Spacer\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.size\r\nimport androidx.compose.foundation.layout.width\r\nimport androidx.compose.foundation.shape.RoundedCornerShape\r\nimport androidx.compose.material3.Button\r\nimport androidx.compose.material3.ButtonDefaults\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout\r\nimport androidx.compose.ui.res.colorResource\r\nimport androidx.compose.ui.res.painterResource\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.tooling.preview.Preview\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport com.example.whatsapp.R\r\n\r\n@Composable\r\n@Preview(showSystemUi = true)\r\nfun WelcomeScreen(){\r\n    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {\r\n        Image(painter = painterResource(id = R.drawable.whatsapp_sticker), contentDescription = null, modifier = Modifier.size(300.dp))\r\n        Text(text = \"Welcome to WhatsApp\", fontSize = 24.sp, fontWeight = FontWeight.Bold)\r\n        Spacer(modifier = Modifier.height(24.dp))\r\n        Row {\r\n            Text(text = \"Read our\", color = Color.Gray)\r\n            Spacer(modifier = Modifier.width(8.dp))\r\n            Text(text = \"Privacy Policy\", color = colorResource(id = R.color.light_green))\r\n            Spacer(modifier = Modifier.width(8.dp))\r\n            Text(text = \"Tap 'Agree and continue' to \", color = Color.Gray)\r\n        }\r\n\r\n        Row {\r\n            Text(text = \"accept the\", color = Color.Gray)\r\n            Spacer(modifier = Modifier.width(8.dp))\r\n            Text(text = \"Term of Services\", color = colorResource(id = R.color.light_green))\r\n        }\r\n        Spacer(modifier = Modifier.height(24.dp))\r\n        Button(onClick = {}, modifier = Modifier.size(280.dp, 43.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.dark_green))){\r\n            Text(text = \"Agree and Continue\", fontSize = 16.sp)\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/whatsapp/presentation/welcomescreen/WelcomeScreen.kt b/app/src/main/java/com/example/whatsapp/presentation/welcomescreen/WelcomeScreen.kt
+--- a/app/src/main/java/com/example/whatsapp/presentation/welcomescreen/WelcomeScreen.kt	(revision b9e64233e899aff7c54e9e7901402dc2d463f907)
++++ b/app/src/main/java/com/example/whatsapp/presentation/welcomescreen/WelcomeScreen.kt	(date 1757743954112)
+@@ -28,9 +28,17 @@
+ 
+ @Composable
+ @Preview(showSystemUi = true)
+-fun WelcomeScreen(){
+-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+-        Image(painter = painterResource(id = R.drawable.whatsapp_sticker), contentDescription = null, modifier = Modifier.size(300.dp))
++fun WelcomeScreen() {
++    Column(
++        modifier = Modifier.fillMaxSize(),
++        verticalArrangement = Arrangement.Center,
++        horizontalAlignment = Alignment.CenterHorizontally
++    ) {
++        Image(
++            painter = painterResource(id = R.drawable.whatsapp_sticker),
++            contentDescription = null,
++            modifier = Modifier.size(300.dp)
++        )
+         Text(text = "Welcome to WhatsApp", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+         Spacer(modifier = Modifier.height(24.dp))
+         Row {
+@@ -47,7 +55,12 @@
+             Text(text = "Term of Services", color = colorResource(id = R.color.light_green))
+         }
+         Spacer(modifier = Modifier.height(24.dp))
+-        Button(onClick = {}, modifier = Modifier.size(280.dp, 43.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.dark_green))){
++        Button(
++            onClick = {},
++            modifier = Modifier.size(280.dp, 43.dp),
++            shape = RoundedCornerShape(8.dp),
++            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.dark_green))
++        ) {
+             Text(text = "Agree and Continue", fontSize = 16.sp)
+         }
+     }
+Index: .idea/deploymentTargetSelector.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"deploymentTargetSelector\">\r\n    <selectionStates>\r\n      <SelectionState runConfigName=\"app\">\r\n        <option name=\"selectionMode\" value=\"DROPDOWN\" />\r\n      </SelectionState>\r\n      <SelectionState runConfigName=\"UserRegistrationScreen\">\r\n        <option name=\"selectionMode\" value=\"DROPDOWN\" />\r\n      </SelectionState>\r\n    </selectionStates>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deploymentTargetSelector.xml b/.idea/deploymentTargetSelector.xml
+--- a/.idea/deploymentTargetSelector.xml	(revision b9e64233e899aff7c54e9e7901402dc2d463f907)
++++ b/.idea/deploymentTargetSelector.xml	(date 1757926505756)
+@@ -5,9 +5,6 @@
+       <SelectionState runConfigName="app">
+         <option name="selectionMode" value="DROPDOWN" />
+       </SelectionState>
+-      <SelectionState runConfigName="UserRegistrationScreen">
+-        <option name="selectionMode" value="DROPDOWN" />
+-      </SelectionState>
+     </selectionStates>
+   </component>
+ </project>
+\ No newline at end of file

@@ -28,7 +28,7 @@ import com.example.whatsapp.presentation.bottomnavigation.BottomNavigation
 
 @Composable
 @Preview(showSystemUi = true)
-fun UpdateScreen(){
+fun UpdateScreen() {
     val scrollState = rememberScrollState()
     val sampleStatus = listOf(
         StatusData(image = R.drawable.bhuvan_bam, name = "Bhuvan Bam", time = "10:00 AM"),
@@ -36,33 +36,68 @@ fun UpdateScreen(){
         StatusData(image = R.drawable.rashmika, name = "Huu Huy", time = "15 min ago"),
     )
     val sampleChannels = listOf(
-        Channels(image = R.drawable.neat_roots, name = "Neat Roots", description = "This is Neat Roots"),
-        Channels(image = R.drawable.neat_roots, name = "Neat Roots", description = "This is Neat Roots"),
-        Channels(image = R.drawable.neat_roots, name = "Neat Roots", description = "This is Neat Roots")
+        Channels(
+            image = R.drawable.neat_roots,
+            name = "Neat Roots",
+            description = "This is Neat Roots"
+        ),
+        Channels(
+            image = R.drawable.neat_roots,
+            name = "Neat Roots",
+            description = "This is Neat Roots"
+        ),
+        Channels(
+            image = R.drawable.neat_roots,
+            name = "Neat Roots",
+            description = "This is Neat Roots"
+        )
 
     )
 
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = {}, containerColor = colorResource(id = R.color.light_green),
+            FloatingActionButton(
+                onClick = {}, containerColor = colorResource(id = R.color.light_green),
                 modifier = Modifier.size(65.dp),
-                contentColor = Color.White) {
-                Icon(painter = painterResource(id = R.drawable.baseline_photo_camera_24), contentDescription = null)
+                contentColor = Color.White
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_photo_camera_24),
+                    contentDescription = null
+                )
 
             }
         }, bottomBar = { BottomNavigation() },
-        topBar = {TopBar()}
+        topBar = { TopBar() }
     ) {
 
-        Column(modifier = Modifier.padding(it).fillMaxWidth().verticalScroll(scrollState)) {
-            Text(text = "Status", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black, modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp))
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxWidth()
+                .verticalScroll(scrollState)
+        ) {
+            Text(
+                text = "Status",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+            )
             MyStatus()
             sampleStatus.forEach { data ->
-                StatusItem(statusData = data) }
+                StatusItem(statusData = data)
+            }
             Spacer(modifier = Modifier.height(16.dp))
             HorizontalDivider(color = Color.Gray)
-            Text(text = "Channels", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black, modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp))
+            Text(
+                text = "Channels",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+            )
             Spacer(modifier = Modifier.height(8.dp))
 
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -72,7 +107,8 @@ fun UpdateScreen(){
 
                 Spacer(modifier = Modifier.height(16.dp))
                 sampleChannels.forEach { data ->
-                    ChannelItemDesign(channels = data) }
+                    ChannelItemDesign(channels = data)
+                }
 
 
             }
