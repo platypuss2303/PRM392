@@ -80,7 +80,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-analytics")
-
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 

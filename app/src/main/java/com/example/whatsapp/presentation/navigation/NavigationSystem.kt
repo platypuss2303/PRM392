@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.whatsapp.presentation.communityscreen.CommunityScreen
 import com.example.whatsapp.presentation.homescreen.HomeScreen
+import com.example.whatsapp.presentation.profile.UserProfileSetScreen
 import com.example.whatsapp.presentation.splashscreen.SplashScreen
 import com.example.whatsapp.presentation.userregistratrion.UserRegistrationScreen
 import com.example.whatsapp.presentation.welcomescreen.WelcomeScreen
@@ -29,6 +30,10 @@ fun NavigationSystem(){
         }
         composable<Routes.CommunityScreen>{
             CommunityScreen()
+        }
+
+        composable<Routes.UserProfileSetScreen>{
+            UserProfileSetScreen(navHostController = navController)
         }
 
     }
