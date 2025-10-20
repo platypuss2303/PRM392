@@ -61,7 +61,7 @@ fun HomeScreen() {
             Column(modifier = Modifier.padding(it)) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Box(modifier = Modifier.fillMaxWidth()){
-                    Text(text = "WhatsApp", fontSize = 28.sp, color = colorResource(id = R.color.light_green),
+                    Text(text = "SocialChat", fontSize = 28.sp, color = colorResource(id = R.color.light_green),
                         modifier = Modifier.align(Alignment.CenterStart).padding(start = 16.dp), fontWeight = FontWeight.Bold)
                     Row(modifier = Modifier.align(Alignment.CenterEnd)) {
                         IconButton(onClick = {}) {

@@ -90,7 +90,7 @@ class PhoneAuthViewModel @Inject constructor(
             phoneNumber = Firebase.auth.currentUser?.phoneNumber?: "",
             profileImage = encodedImage,
         )
-
+        database.child("users").child(userId).setValue(userProfile)
     }
 
 
