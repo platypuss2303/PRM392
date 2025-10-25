@@ -231,7 +231,7 @@ class BaseViewModel : ViewModel() {
                             chatList.add(
                                 ChatDesignModel(
                                     name = name,
-//                                    image = profileImageBitmap,
+                                    image = profileImageBitmap as Int?,
                                     message = lastMessage,
                                     time = time
                                 )
@@ -265,7 +265,7 @@ class BaseViewModel : ViewModel() {
     }
 
     @OptIn(ExperimentalEncodingApi::class)
-    private fun base64ToBitmap(base64String: String): Bitmap?{
+    fun base64ToBitmap(base64String: String): Bitmap?{
         return try{
             val decodeByte = Base64.decode(base64String, android.util.Base64.DEFAULT)
             val inputStream: InputStream = ByteArrayInputStream(decodeByte)

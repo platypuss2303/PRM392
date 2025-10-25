@@ -20,11 +20,12 @@ import com.example.whatsapp.R
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.whatsapp.presentation.bottomnavigation.BottomNavigation
+import com.example.whatsapp.presentation.navigation.Routes
 
 @Composable
-@Preview(showSystemUi = true)
-fun CommunityScreen(){
+fun CommunityScreen(navHostController: NavHostController){
     val sampleCommunities = listOf(
         Communities(image = R.drawable.neat_roots, name = "Neat Roots", description = "We love plants"),
         Communities(image = R.drawable.neat_roots, name = "Neat Roots", description = "We love plants"),
@@ -32,7 +33,14 @@ fun CommunityScreen(){
     )
     Scaffold(
         topBar = {TopBar()},
-        bottomBar = {BottomNavigation()}
+        bottomBar = {BottomNavigation(navHostController, selectedItem = 0, onClick = { index ->
+            when(index){
+                0 -> {navHostController.navigate(Routes.HomeScreen)}
+                1 -> {navHostController.navigate(Routes.UpdateScreen)}
+                2 -> {navHostController.navigate(Routes.CommunityScreen)}
+                3 -> {navHostController.navigate(Routes.CallScreen)}
+            }
+        })}
     ) {
         Column(modifier = Modifier.padding(it)) {
             Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.light_green)),

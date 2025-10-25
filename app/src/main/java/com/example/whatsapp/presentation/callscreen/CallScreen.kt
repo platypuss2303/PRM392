@@ -37,12 +37,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.whatsapp.R
 import com.example.whatsapp.presentation.bottomnavigation.BottomNavigation
+import com.example.whatsapp.presentation.navigation.Routes
 
 @Composable
-@Preview(showSystemUi = true)
-fun CallScreen() {
+fun CallScreen(navHostController: NavHostController) {
     val sampleCall = listOf(
         Call(
             image = R.drawable.bhuvan_bam,
@@ -171,7 +172,14 @@ fun CallScreen() {
                 }
             }
         },
-        bottomBar = { BottomNavigation() },
+        bottomBar = { BottomNavigation(navHostController, selectedItem = 0, onClick = { index ->
+            when(index){
+                0 -> {navHostController.navigate(Routes.HomeScreen)}
+                1 -> {navHostController.navigate(Routes.UpdateScreen)}
+                2 -> {navHostController.navigate(Routes.CommunityScreen)}
+                3 -> {navHostController.navigate(Routes.CallScreen)}
+            }
+        }) },
         floatingActionButton = {
 
             FloatingActionButton(

@@ -11,3 +11,4 @@ data class ChatDesignModel(
 ){
     constructor(): this(null, null, null, null, null, null, null)
 }
+
