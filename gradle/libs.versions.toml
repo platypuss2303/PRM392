@@ -13,6 +13,7 @@ firebaseDatabase = "22.0.1"
 firebaseFirestore = "26.0.1"
 firebaseAuth= "24.0.1"
 firebaseCrashlyticsBuildtools = "3.0.6"
+firebaseStorageKtx = "22.0.1"
 
 
 [libraries]
@@ -34,6 +35,7 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 firebase-firestore= { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-auth= { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

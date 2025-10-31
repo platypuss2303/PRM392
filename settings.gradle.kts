@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "whatsApp"
 include(":app")
- 
+include(":instagram")
+
+

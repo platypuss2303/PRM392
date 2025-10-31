@@ -31,7 +31,7 @@ import com.example.whatsapp.presentation.navigation.Routes
 fun WelcomeScreen(navController: NavController){
     Column(modifier = Modifier.fillMaxSize().background(Color.White), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Image(painter = painterResource(id = R.drawable.whatsapp_sticker), contentDescription = null, modifier = Modifier.size(300.dp))
-        Text(text = "Welcome to WhatsApp", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Welcome to Chatto", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(24.dp))
         Row {
             Text(text = "Read our", color = Color.Gray)

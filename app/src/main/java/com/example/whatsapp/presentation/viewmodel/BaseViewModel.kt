@@ -4,11 +4,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.Snapshot
-import androidx.compose.ui.text.input.ImeOptions
 import androidx.lifecycle.ViewModel
-import com.example.whatsapp.models.Message
+import com.example.whatsapp.domain.models.Message
 import com.example.whatsapp.presentation.chatbox.ChatDesignModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener

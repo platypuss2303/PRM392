@@ -7,7 +7,7 @@ import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.auth.Aut
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
-import com.example.whatsapp.models.PhoneAuthUser
+import com.example.whatsapp.domain.models.PhoneAuthUser
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential

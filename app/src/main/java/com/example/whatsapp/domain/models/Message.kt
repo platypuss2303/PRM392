@@ -1,4 +1,4 @@
-package com.example.whatsapp.models
+package com.example.whatsapp.domain.models
 
 data class Message(
     val senderPhoneNumber: String = "",
