@@ -115,7 +115,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
-                                android:textSize="12dp"
+                                android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:textColor="@android:color/black"
                                 />
@@ -124,7 +124,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Posts"
-                                android:textSize="12dp"
+                                android:textSize="12sp"
                                 android:textColor="@android:color/black"
                                 />
 
@@ -143,7 +143,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
-                                android:textSize="12dp"
+                                android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:textColor="@android:color/black"
                                 />
@@ -152,7 +152,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Followers"
-                                android:textSize="12dp"
+                                android:textSize="12sp"
                                 android:textColor="@android:color/black"
                                 />
 
@@ -171,7 +171,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
-                                android:textSize="12dp"
+                                android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:textColor="@android:color/black"
                                 />
@@ -180,7 +180,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Following"
-                                android:textSize="12dp"
+                                android:textSize="12sp"
                                 android:textColor="@android:color/black"
                                 />
 
@@ -192,12 +192,13 @@
                     <Button
                         android:id="@+id/edit_account_settings_btn"
                         android:layout_width="170dp"
-                        android:layout_height="40dp"
+                        android:layout_height="48dp"
                         android:text="Edit Profile"
                         android:textAllCaps="false"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/buttons_background"
+
                         />
 
                 </LinearLayout>
@@ -218,7 +219,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Full name"
-                    android:textSize="13dp"
+                    android:textSize="13sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
                     />
@@ -251,6 +252,7 @@
                     android:src="@drawable/grid"
                     android:layout_weight="1"
                     style="?android:attr/buttonBarButtonStyle"
+
                     />
 
                 <ImageButton
