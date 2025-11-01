@@ -5,35 +5,39 @@ import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.example.instagram.fragments.HomeFragment
+import com.example.instagram.fragments.NotificationsFragment
+import com.example.instagram.fragments.ProfileFragment
+import com.example.instagram.fragments.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
-class MainActivity : ComponentActivity() {
-    private lateinit var textView: TextView
+
+class MainActivity : AppCompatActivity() {
+    internal var selectedFragment: Fragment? = null
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.nav_home -> {
-                textView.setText("Home")
-                return@OnNavigationItemSelectedListener true
+                selectedFragment = HomeFragment()
             }
             R.id.nav_search -> {
-                textView.setText("Search")
-                return@OnNavigationItemSelectedListener true
+                selectedFragment = SearchFragment()
             }
             R.id.nav_add_post -> {
-                textView.setText("Add Post")
-                return@OnNavigationItemSelectedListener true
             }
             R.id.nav_notification -> {
-                textView.setText("Notifications")
-                return@OnNavigationItemSelectedListener true
+                selectedFragment = NotificationsFragment()
             }
             R.id.nav_profile -> {
-                textView.setText("Profile")
-                return@OnNavigationItemSelectedListener true
+                selectedFragment = ProfileFragment()
             }
         }
-
+    if(selectedFragment != null){
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, HomeFragment()).commit()
+        selectedFragment!!
+    }
         false
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +46,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        textView = findViewById(R.id.message)
-
-
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 }
