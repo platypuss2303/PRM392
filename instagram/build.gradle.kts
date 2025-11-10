@@ -73,6 +73,10 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-storage")
 
+    implementation("com.squareup.picasso:picasso:2.8")
+    implementation("com.vanniktech:android-image-cropper:4.6.0")
+
+    implementation("io.github.Canhub:cropper:3.0.0")
 
 
 }

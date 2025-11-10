@@ -22,6 +22,7 @@ material3 = "1.4.0"
 composeMaterial = "1.5.4"
 appcompatVersion = "1.7.1"
 firebaseAuthKtx = "24.0.1"
+identityDoctypesJvm = "202411.1"
 
 
 [libraries]
@@ -52,6 +53,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3",
 androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+identity-doctypes-jvm = { group = "com.android.identity", name = "identity-doctypes-jvm", version.ref = "identityDoctypesJvm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
