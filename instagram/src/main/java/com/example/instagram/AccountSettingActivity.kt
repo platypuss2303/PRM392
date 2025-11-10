@@ -1,3 +1,4 @@
+
 package com.example.instagram
 
 import android.app.Activity
@@ -10,8 +11,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.canhub.cropper.CropImage
-import com.canhub.cropper.CropImageView
+import com.yalantis.ucrop.UCrop
+import com.yalantis.ucrop.UCropActivity
 import com.example.instagram.model.User
 import com.example.instagram.databinding.ActivityAccountSettingBinding
 import com.google.android.gms.tasks.Continuation
@@ -38,14 +39,25 @@ class AccountSettingActivity : AppCompatActivity() {
     private lateinit var storageProfilePicRef: StorageReference
     private var loadingDialog: AlertDialog? = null
 
-    // Activity Result Launcher cho CropImage
+    // Activity Result Launcher for uCrop final cropped image
     private val cropImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val cropResult = CropImage.getActivityResult(result.data)
-            imageUri = cropResult?.uriContent
-            imageUri?.let {
-                binding.profileImageViewProfileFrag.setImageURI(it)
+        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+            UCrop.getOutput(result.data!!)?.let { uri ->
+                imageUri = uri
+                binding.profileImageViewProfileFrag.setImageURI(uri)
             }
+        }
+    }
+
+    // Image picker launcher (gallery)
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let { source ->
+            val destinationUri = Uri.fromFile(java.io.File(cacheDir, "cropped_${System.currentTimeMillis()}.jpg"))
+            val uCropIntent = UCrop.of(source, destinationUri)
+                .withAspectRatio(1f, 1f)
+                .withMaxResultSize(800, 800)
+                .getIntent(this)
+            cropImageLauncher.launch(uCropIntent)
         }
     }
 
@@ -76,11 +88,7 @@ class AccountSettingActivity : AppCompatActivity() {
 
         binding.changeImageTextBtn.setOnClickListener {
             checker = "clicked"
-            val intent = CropImage.activity()
-                .setAspectRatio(1, 1)
-                .setCropShape(CropImageView.CropShape.OVAL)
-                .getIntent(this)
-            cropImageLauncher.launch(intent)
+            imagePickerLauncher.launch("image/*")
         }
 
         binding.saveInforProfileBtn.setOnClickListener {
@@ -179,12 +187,12 @@ class AccountSettingActivity : AppCompatActivity() {
                 val fileRef = storageProfilePicRef.child("${firebaseUser.uid}.jpg")
                 val uploadTask: StorageTask<*> = fileRef.putFile(imageUri!!)
 
-                uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                uploadTask.continueWithTask { task ->
                     if (!task.isSuccessful) {
                         task.exception?.let { throw it }
                     }
-                    return@Continuation fileRef.downloadUrl
-                }).addOnCompleteListener { task ->
+                    fileRef.downloadUrl
+                }.addOnCompleteListener { task ->
                     hideLoading()
 
                     if (task.isSuccessful) {
