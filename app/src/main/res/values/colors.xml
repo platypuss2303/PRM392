@@ -10,4 +10,9 @@
     <color name="light_green">#19ab60</color>
     <color name="dark_green">#008169</color>
     <color name="mint_green">#c3f7d2</color>
+    <color name="colorPrimary">#5C32C7</color>
+    <color name="colorPrimaryDark">#CCCCD0</color>
+    <color name="colorAccent">#ff68a5</color>
+    <color name="colorBlack">#c2bdbf</color>
+    <color name="colorBlue">#5552FF</color>
 </resources>

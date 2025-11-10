@@ -1,4 +1,4 @@
-package com.example.instagram.fragments
+package com.example.whatsapp.presentation.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import android.widget.Button
 import androidx.wear.compose.material.Button
-import com.example.instagram.R
+import com.example.whatsapp.R
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,7 +42,26 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         // Find the button by its ID
+        val goToWhatsAppButton = view.findViewById<Button>(R.id.go_to_whatsapp_button)
 
+        // Set the click listener
+        goToWhatsAppButton.setOnClickListener {
+            // Define the full class name of the Activity you want to launch
+            // This assumes your app module's package is "com.example.whatsapp"
+            // and the main activity is "com.example.whatsapp.MainActivity"
+            val targetActivity = "com.example.whatsapp.MainActivity"
+
+            // Create an Intent to launch the activity by its class name
+            val intent = Intent().setClassName(requireContext(), targetActivity)
+
+            // Check if there is an Activity that can handle this Intent
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(intent)
+            } else {
+                // Show an error message if the Activity is not found
+                Toast.makeText(context, "Could not launch the App module", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         return view
     }

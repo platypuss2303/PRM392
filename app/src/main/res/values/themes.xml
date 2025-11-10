@@ -2,4 +2,6 @@
 <resources>
 
     <style name="Theme.WhatsApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Instagram" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    </style>
 </resources>
