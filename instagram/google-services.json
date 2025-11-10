@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "537994947105",
+    "project_id": "chatto-2eb54",
+    "storage_bucket": "chatto-2eb54.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537994947105:android:a502ae36b789c6902b1160",
+        "android_client_info": {
+          "package_name": "com.example.instagram"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZZeKjVVqbDiAZO0pa4kJeZ4IBRHDbIIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
