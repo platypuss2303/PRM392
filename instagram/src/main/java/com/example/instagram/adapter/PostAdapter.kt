@@ -1,6 +1,7 @@
 package com.example.instagram.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
+import com.example.instagram.MainActivity
 import com.example.instagram.R
 import com.example.instagram.model.Post
 import com.example.instagram.model.User
@@ -37,10 +39,73 @@ class PostAdapter(private val mContext: Context, private val mPost: List<Post>):
         val post = mPost[position]
         Picasso.get().load(post.getPostimage()).into(holder.postImage)
 
-        publisherInfo(holder.profileImage, holder.userName, holder.publisher, post.getPublisher())
+        if(post.getDescription().equals("")){
+            holder.description.visibility = View.GONE
+        }else{
+            holder.description.visibility = View.VISIBLE
+            holder.description.setText(post.getDescription())
+        }
 
+        publisherInfo(holder.profileImage, holder.userName, holder.publisher, post.getPublisher())
+        isLikes(post.getPostid(), holder.likeButton)
+        numberOfLikes(holder.likes, post.getPostid())
+
+        holder.likeButton.setOnClickListener {
+            if (holder.likeButton.tag == "Like") {
+                FirebaseDatabase.getInstance().reference
+                    .child("Likes").child(post.getPostid())
+                    .child(firebaseUser!!.uid).setValue(true)
+
+            }else{
+                FirebaseDatabase.getInstance().reference
+                    .child("Likes").child(post.getPostid())
+                    .child(firebaseUser!!.uid).removeValue()
+
+                val intent = Intent(mContext, MainActivity::class.java)
+                mContext.startActivity(intent)
+            }
+        }
     }
 
+    private fun numberOfLikes(likes: TextView, postid: String) {
+        val likesRef = FirebaseDatabase.getInstance().reference
+            .child("Likes").child(postid)
+
+        likesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                if (p0.exists()) {
+                    likes.text = p0.childrenCount.toString() + " likes"
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error if needed
+            }
+        })
+    }
+
+    private fun isLikes(postid: String, likeButton: ImageView) {
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        val likesRef = FirebaseDatabase.getInstance().reference
+            .child("Likes").child(postid)
+
+        likesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                if (p0.child(firebaseUser!!.uid).exists()) {
+                    likeButton.setImageResource(R.drawable.heart_clicked)
+                    likeButton.tag = "Liked"
+
+                }else{
+                    likeButton.setImageResource(R.drawable.heart_not_clicked)
+                    likeButton.tag = "Like"
+                
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+
+    }
 
 
     override fun getItemCount(): Int {
