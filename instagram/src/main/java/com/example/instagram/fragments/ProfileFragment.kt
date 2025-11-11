@@ -7,14 +7,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.AccountSettingActivity
 import com.example.instagram.model.User
 import com.example.instagram.R
+import com.example.instagram.adapter.MyImagesAdapter
 import com.example.instagram.databinding.FragmentProfileBinding
+import com.example.instagram.model.Post
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
+import java.util.Collections
 
 class ProfileFragment : Fragment() {
 
@@ -23,11 +29,14 @@ class ProfileFragment : Fragment() {
 
     private lateinit var profileId: String
     private lateinit var firebaseUser: FirebaseUser
+    private var postList: ArrayList<Post> = ArrayList()
+    private var myImagesAdapter: MyImagesAdapter? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -42,6 +51,20 @@ class ProfileFragment : Fragment() {
             checkFollowAndFollowingButtonStatus()
         }
 
+        var recyclerViewUpLoadImages: RecyclerView
+        recyclerViewUpLoadImages = binding.recyclerViewUploadPic
+        recyclerViewUpLoadImages.setHasFixedSize(true)
+        var linearLayoutManager: LinearLayoutManager = GridLayoutManager(context, 3)
+        recyclerViewUpLoadImages.layoutManager = linearLayoutManager
+
+        myImagesAdapter = context?.let {
+            MyImagesAdapter(it, postList)
+        }
+        recyclerViewUpLoadImages.adapter = myImagesAdapter
+
+
+
+
         binding.editAccountSettingsBtn.setOnClickListener {
             val buttonText = binding.editAccountSettingsBtn.text.toString()
             when (buttonText) {
@@ -54,6 +77,7 @@ class ProfileFragment : Fragment() {
         getFollowers()
         getFollowings()
         userInfo()
+        myPhotos()
 
         return view
     }
@@ -123,6 +147,29 @@ class ProfileFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    private fun myPhotos(){
+        val postRef = FirebaseDatabase.getInstance().reference.child("Posts")
+        postRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                postList.clear()
+                if(p0.exists()){
+                    for(snapshot in p0.children){
+                        val post = snapshot.getValue(Post::class.java)
+                        if(post != null && post.getPublisher() == profileId){
+                            postList.add(post)
+                        }
+                    }
+                    postList.reverse()
+                    myImagesAdapter?.notifyDataSetChanged()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error if needed
+            }
         })
     }
 
