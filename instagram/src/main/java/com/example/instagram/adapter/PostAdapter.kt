@@ -51,6 +51,7 @@ class PostAdapter(private val mContext: Context, private val mPost: List<Post>):
         isLikes(post.getPostid(), holder.likeButton)
         numberOfLikes(holder.likes, post.getPostid())
         getTotalComments(holder.comments, post.getPostid())
+        checkSavedStatus(post.getPostid(), holder.saveButton)
 
         holder.likeButton.setOnClickListener {
             if (holder.likeButton.tag == "Like") {
@@ -79,6 +80,23 @@ class PostAdapter(private val mContext: Context, private val mPost: List<Post>):
             intentComment.putExtra("postId", post.getPostid())
             intentComment.putExtra("publisherId", post.getPublisher())
             mContext.startActivity(intentComment)
+        }
+
+        holder.saveButton.setOnClickListener {
+            if(holder.saveButton.tag == "Save"){
+                FirebaseDatabase.getInstance().reference.
+                child("Saves").
+                child(firebaseUser!!.uid).
+                child(post.getPostid()).
+                setValue(true)
+
+            }else{
+                FirebaseDatabase.getInstance().reference.
+                child("Saves").
+                child(firebaseUser!!.uid).
+                child(post.getPostid()).
+                removeValue()
+            }
         }
 
     }
@@ -201,5 +219,27 @@ class PostAdapter(private val mContext: Context, private val mPost: List<Post>):
                 // Handle database error if needed
             }
         })
+    }
+    private fun checkSavedStatus(postid: String, imageView: ImageView){
+        val savesRef = FirebaseDatabase.getInstance().reference
+            .child("Saves").child(firebaseUser!!.uid)
+
+        savesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.child(postid).exists()){
+                    imageView.setImageResource(R.drawable.save_large_icon)
+                    imageView.tag = "Saved"
+
+            }else{
+                imageView.setImageResource(R.drawable.save_unfilled_large_icon)
+                imageView.tag = "Save"
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+
     }
 }

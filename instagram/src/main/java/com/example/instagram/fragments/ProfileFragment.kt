@@ -78,6 +78,8 @@ class ProfileFragment : Fragment() {
         getFollowings()
         userInfo()
         myPhotos()
+        getTotalNumberOfPosts()
+
 
         return view
     }
@@ -212,6 +214,29 @@ class ProfileFragment : Fragment() {
         super.onDestroy()
         saveProfileIdToPrefs()
         _binding = null
+    }
+
+    private fun getTotalNumberOfPosts(){
+        val postsRef = FirebaseDatabase.getInstance().reference
+            .child("Posts")
+        postsRef.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(p0: DataSnapshot) {
+                if(p0.exists()){
+                    var postCounter = 0
+                    for(snapshot in p0.children){
+                        val post = snapshot.getValue(Post::class.java)
+                        if(post?.getPublisher() == profileId){
+                            postCounter++
+                        }
+                    }
+                    binding.totalPosts.text = postCounter.toString()
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error if needed
+            }
+
+        })
     }
 
     private fun saveProfileIdToPrefs() {
