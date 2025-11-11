@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,10 @@ class ProfileFragment : Fragment() {
     private lateinit var firebaseUser: FirebaseUser
     private var postList: ArrayList<Post> = ArrayList()
     private var myImagesAdapter: MyImagesAdapter? = null
+    private var myImagesAdapterSavedImg: MyImagesAdapter? = null
+    private var postListSaved: ArrayList<Post> = ArrayList()
+    private var mySavesImg: ArrayList<String> = ArrayList()
+
 
 
     override fun onCreateView(
@@ -51,6 +56,7 @@ class ProfileFragment : Fragment() {
             checkFollowAndFollowingButtonStatus()
         }
 
+        // Upload
         var recyclerViewUpLoadImages: RecyclerView
         recyclerViewUpLoadImages = binding.recyclerViewUploadPic
         recyclerViewUpLoadImages.setHasFixedSize(true)
@@ -62,6 +68,31 @@ class ProfileFragment : Fragment() {
         }
         recyclerViewUpLoadImages.adapter = myImagesAdapter
 
+        // Saved
+        var recyclerViewSavedImages: RecyclerView
+        recyclerViewSavedImages = binding.recyclerViewSavedPic
+        recyclerViewSavedImages.setHasFixedSize(true)
+        var linearLayoutManager2: LinearLayoutManager = GridLayoutManager(context, 3)
+        recyclerViewSavedImages.layoutManager = linearLayoutManager2
+
+        myImagesAdapterSavedImg = context?.let {
+            MyImagesAdapter(it, postListSaved)
+        }
+        recyclerViewSavedImages.adapter = myImagesAdapterSavedImg
+
+        var uploadedImagesBtn: ImageButton
+        uploadedImagesBtn = binding.imagesGridViewBtn
+        uploadedImagesBtn.setOnClickListener {
+            recyclerViewUpLoadImages.visibility = View.VISIBLE
+            recyclerViewSavedImages.visibility = View.GONE
+        }
+
+        var savedImagesBtn: ImageButton
+        savedImagesBtn = binding.imagesSaveBtn
+        savedImagesBtn.setOnClickListener {
+            recyclerViewUpLoadImages.visibility = View.GONE
+            recyclerViewSavedImages.visibility = View.VISIBLE
+        }
 
 
 
@@ -79,10 +110,14 @@ class ProfileFragment : Fragment() {
         userInfo()
         myPhotos()
         getTotalNumberOfPosts()
+        mySaves()
+
 
 
         return view
     }
+
+
 
     private fun followUser() {
         firebaseUser.uid.let { uid ->
@@ -243,5 +278,51 @@ class ProfileFragment : Fragment() {
         val pref = context?.getSharedPreferences("PREFS", Context.MODE_PRIVATE)?.edit()
         pref?.putString("profileId", firebaseUser.uid)
         pref?.apply()
+    }
+
+    private fun mySaves() {
+        var savesRef = FirebaseDatabase.getInstance().reference
+            .child("Saves").child(firebaseUser.uid)
+
+        savesRef.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    for(snapshot in snapshot.children){
+                        (mySavesImg as ArrayList<String>).add(snapshot.key!!)
+                    }
+                    readSavedImagesData()
+                }
+            }
+
+            private fun readSavedImagesData() {
+                val postRef = FirebaseDatabase.getInstance().reference.child("Posts")
+                postRef.addValueEventListener(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if(snapshot.exists()){
+                            postListSaved.clear()
+                            for(snapshot in snapshot.children){
+                                val post = snapshot.getValue(Post::class.java)
+                                if(post != null){
+                                    for(key in mySavesImg){
+                                        if(post.getPostid() == key){
+                                            postListSaved.add(post)
+                                        }
+                                    }
+                                }
+                            }
+                            myImagesAdapterSavedImg?.notifyDataSetChanged()
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        // Handle database error if needed
+                    }
+                })
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error if needed
+            }
+        })
     }
 }
