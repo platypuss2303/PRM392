@@ -94,7 +94,19 @@ class ProfileFragment : Fragment() {
             recyclerViewSavedImages.visibility = View.VISIBLE
         }
 
+        binding.totalFollowers.setOnClickListener {
+            val intent = Intent(context, com.example.instagram.ShowUsersActivity::class.java)
+            intent.putExtra("id", profileId)
+            intent.putExtra("title", "Followers")
+            startActivity(intent)
+        }
 
+        binding.totalFollowing.setOnClickListener {
+            val intent = Intent(context, com.example.instagram.ShowUsersActivity::class.java)
+            intent.putExtra("id", profileId)
+            intent.putExtra("title", "Following")
+            startActivity(intent)
+        }
 
         binding.editAccountSettingsBtn.setOnClickListener {
             val buttonText = binding.editAccountSettingsBtn.text.toString()
@@ -146,10 +158,12 @@ class ProfileFragment : Fragment() {
 
         followingRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.child(profileId).exists()) {
-                    binding.editAccountSettingsBtn.text = "Following"
-                } else {
-                    binding.editAccountSettingsBtn.text = "Follow"
+                if (_binding != null) {
+                    if (snapshot.child(profileId).exists()) {
+                        binding.editAccountSettingsBtn.text = "Following"
+                    } else {
+                        binding.editAccountSettingsBtn.text = "Follow"
+                    }
                 }
             }
 
@@ -163,7 +177,7 @@ class ProfileFragment : Fragment() {
 
         followersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
+                if (_binding != null && snapshot.exists()) {
                     binding.totalFollowers.text = snapshot.childrenCount.toString()
                 }
             }
@@ -178,7 +192,7 @@ class ProfileFragment : Fragment() {
 
         followingRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
+                if (_binding != null && snapshot.exists()) {
                     binding.totalFollowing.text = snapshot.childrenCount.toString()
                 }
             }
@@ -216,7 +230,7 @@ class ProfileFragment : Fragment() {
 
         usersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
+                if (_binding != null && snapshot.exists()) {
                     val user = snapshot.getValue(User::class.java)
                     user?.let {
                         Picasso.get()
@@ -256,7 +270,7 @@ class ProfileFragment : Fragment() {
             .child("Posts")
         postsRef.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
-                if(p0.exists()){
+                if(_binding != null && p0.exists()){
                     var postCounter = 0
                     for(snapshot in p0.children){
                         val post = snapshot.getValue(Post::class.java)

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.CommentsActivity
 import com.example.instagram.MainActivity
 import com.example.instagram.R
+import com.example.instagram.ShowUsersActivity
 import com.example.instagram.model.Post
 import com.example.instagram.model.User
 import com.google.firebase.auth.FirebaseAuth
@@ -73,6 +74,12 @@ class PostAdapter(private val mContext: Context, private val mPost: List<Post>):
             intentComment.putExtra("postId", post.getPostid())
             intentComment.putExtra("publisherId", post.getPublisher())
             mContext.startActivity(intentComment)
+        }
+        holder.likes.setOnClickListener {
+            val intent = Intent(mContext, ShowUsersActivity::class.java)
+            intent.putExtra("id", post.getPostid())
+            intent.putExtra("title", "Likes")
+            mContext.startActivity(intent)
         }
 
         holder.comments.setOnClickListener {
