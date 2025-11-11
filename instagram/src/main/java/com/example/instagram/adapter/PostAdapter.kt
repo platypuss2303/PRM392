@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
+import com.example.instagram.CommentsActivity
 import com.example.instagram.MainActivity
 import com.example.instagram.R
 import com.example.instagram.model.Post
@@ -49,6 +50,7 @@ class PostAdapter(private val mContext: Context, private val mPost: List<Post>):
         publisherInfo(holder.profileImage, holder.userName, holder.publisher, post.getPublisher())
         isLikes(post.getPostid(), holder.likeButton)
         numberOfLikes(holder.likes, post.getPostid())
+        getTotalComments(holder.comments, post.getPostid())
 
         holder.likeButton.setOnClickListener {
             if (holder.likeButton.tag == "Like") {
@@ -65,6 +67,20 @@ class PostAdapter(private val mContext: Context, private val mPost: List<Post>):
                 mContext.startActivity(intent)
             }
         }
+        holder.commentButton.setOnClickListener {
+            val intentComment = Intent(mContext, CommentsActivity::class.java)
+            intentComment.putExtra("postId", post.getPostid())
+            intentComment.putExtra("publisherId", post.getPublisher())
+            mContext.startActivity(intentComment)
+        }
+
+        holder.comments.setOnClickListener {
+            val intentComment = Intent(mContext, CommentsActivity::class.java)
+            intentComment.putExtra("postId", post.getPostid())
+            intentComment.putExtra("publisherId", post.getPublisher())
+            mContext.startActivity(intentComment)
+        }
+
     }
 
     private fun numberOfLikes(likes: TextView, postid: String) {
@@ -75,6 +91,22 @@ class PostAdapter(private val mContext: Context, private val mPost: List<Post>):
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.exists()) {
                     likes.text = p0.childrenCount.toString() + " likes"
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error if needed
+            }
+        })
+    }
+
+    private fun getTotalComments(comments: TextView, postid: String) {
+        val commentsRef = FirebaseDatabase.getInstance().reference
+            .child("Comments").child(postid)
+
+        commentsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                if (p0.exists()) {
+                    comments.text = "View all " + p0.childrenCount.toString() + " comments"
                 }
             }
             override fun onCancelled(error: DatabaseError) {
