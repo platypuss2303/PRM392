@@ -50,7 +50,7 @@ class MessageAdapter(private val userMessagesList: List<Messages>) :
                     val receiverImage = dataSnapshot.child("image").value.toString()
                     Picasso.get()
                         .load(receiverImage)
-                        .placeholder(R.drawable.profile_image)
+                        .placeholder(R.drawable.profile)
                         .into(holder.receiverProfileImage)
                 }
             }
