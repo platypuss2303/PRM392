@@ -115,6 +115,7 @@ class ProfileFragment : Fragment() {
                 "Follow" -> followUser()
                 "Following" -> unfollowUser()
             }
+            addNotification()
         }
 
         getFollowers()
@@ -338,5 +339,20 @@ class ProfileFragment : Fragment() {
                 // Handle database error if needed
             }
         })
+    }
+    private fun addNotification(){
+        val notiRef = FirebaseDatabase.getInstance().reference
+            .child("Notifications")
+            .child(profileId)
+
+        val notiMap = HashMap<String, Any>()
+        notiMap["userid"] = firebaseUser!!.uid
+        notiMap["text"] = "start following you"
+        notiMap["postid"] = ""
+        notiMap["ispost"] = false
+
+        notiRef.push().setValue(notiMap)
+
+
     }
 }

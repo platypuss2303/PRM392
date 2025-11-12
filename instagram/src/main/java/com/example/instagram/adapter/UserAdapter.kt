@@ -47,12 +47,13 @@ class UserAdapter (private var mContext: Context,
         checkFollowingStatus(user.getUID(), holder.followButton)
 
         holder.itemView.setOnClickListener(View.OnClickListener {
-            val pref = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
-            pref.putString("profileId", user.getUID())
-            pref.apply()
-
-            (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment()).commit()
+            if(isFragment){
+                val editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+                editor.putString("profileId", user.getUID())
+                editor.apply()
+                (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, ProfileFragment()).commit()
+            }
         })
 
         holder.followButton.setOnClickListener {
@@ -77,6 +78,7 @@ class UserAdapter (private var mContext: Context,
                             }
                         }
                 }
+                addNotification(user.getUID())
             }
             else
             {
@@ -141,5 +143,20 @@ class UserAdapter (private var mContext: Context,
 
             }
         })
+    }
+    private fun addNotification(userId: String){
+        val notiRef = FirebaseDatabase.getInstance().reference
+            .child("Notifications")
+            .child(userId)
+
+        val notiMap = HashMap<String, Any>()
+        notiMap["userid"] = firebaseUser!!.uid
+        notiMap["text"] = "start following you"
+        notiMap["postid"] = ""
+        notiMap["ispost"] = false
+
+        notiRef.push().setValue(notiMap)
+
+
     }
 }

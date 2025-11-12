@@ -64,13 +64,15 @@ class CommentsActivity : AppCompatActivity() {
     }
 
     private fun addComment() {
+        val commentText = binding.addComment.text.toString().trim()
         val commentsRef = FirebaseDatabase.getInstance().reference
             .child("Comments")
             .child(postId)
         val commentsMap = HashMap<String, Any>()
-        commentsMap["comment"] = binding.addComment.text.toString().trim()
+        commentsMap["comment"] = commentText
         commentsMap["publisher"] = firebaseUser!!.uid
         commentsRef.push().setValue(commentsMap)
+        addNotification(commentText)
 
         binding.addComment.text.clear()
     }
@@ -148,5 +150,21 @@ class CommentsActivity : AppCompatActivity() {
                 // Handle database error if needed
             }
         })
+    }
+
+    private fun addNotification(commentText: String){
+        val notiRef = FirebaseDatabase.getInstance().reference
+            .child("Notifications")
+            .child(publisherId!!)
+
+        val notiMap = HashMap<String, Any>()
+        notiMap["userid"] = firebaseUser!!.uid
+        notiMap["text"] = "commented: $commentText"
+        notiMap["postid"] = postId
+        notiMap["ispost"] = true
+
+        notiRef.push().setValue(notiMap)
+
+
     }
 }
