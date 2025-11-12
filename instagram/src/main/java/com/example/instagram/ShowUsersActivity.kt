@@ -42,10 +42,13 @@ class ShowUsersActivity : AppCompatActivity() {
         userAdapter = UserAdapter(this, userList, false)
         recyclerView.adapter = userAdapter
 
-        when (title) {
-            "Likes" -> getLikes()
-            "Following" -> getFollowing()
-            "Followers" -> getFollowers()
+        val type = intent.getStringExtra("type") ?: ""
+
+        when {
+            title == "Likes" || type == "likes" -> getLikes()
+            title == "Following" || type == "following" -> getFollowing()
+            title == "Followers" || type == "followers" -> getFollowers()
+            title == "Story Viewers" || type == "story_views" -> getStoryViewers()
         }
     }
 
@@ -96,6 +99,37 @@ class ShowUsersActivity : AppCompatActivity() {
             .child("Follow").child(id).child("Followers")
         
         followersRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    idList.clear()
+                    for (snap in snapshot.children) {
+                        snap.key?.let { idList.add(it) }
+                    }
+                    showUsers()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error if needed
+            }
+        })
+    }
+
+    private fun getStoryViewers() {
+        // Get the story owner ID from the intent
+        val storyUserId = intent.getStringExtra("storyUserId") ?: ""
+        
+        val viewsRef = if (storyUserId.isNotEmpty()) {
+            FirebaseDatabase.getInstance().reference
+                .child("Story").child(storyUserId).child(id).child("views")
+        } else {
+            // Fallback: try to get from current user
+            FirebaseDatabase.getInstance().reference
+                .child("Story").child(com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: "")
+                .child(id).child("views")
+        }
+        
+        viewsRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     idList.clear()

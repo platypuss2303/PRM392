@@ -32,6 +32,9 @@ class StoryViewActivity : AppCompatActivity() {
     private var storyId: String = ""
     private var storyUserId: String = ""
     private var currentUserId: String = ""
+    
+    private var storyIds = ArrayList<String>()
+    private var currentStoryIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,25 +61,48 @@ class StoryViewActivity : AppCompatActivity() {
             return
         }
 
-        loadStory()
-        loadUserInfo()
-        addView()
-
-        // Check if this is the user's own story
-        if (storyUserId == currentUserId) {
-            storyDelete.visibility = View.VISIBLE
-            storyViewCountLayout.visibility = View.VISIBLE
-            loadViewCount()
-        }
+        // Load all stories for this user
+        loadAllStories()
 
         // Delete story click
         storyDelete.setOnClickListener {
             showDeleteConfirmation()
         }
 
-        // Close on tap
-        imageStoryView.setOnClickListener {
-            finish()
+        // Click on view count to show viewers
+        storyViewCountLayout.setOnClickListener {
+            showViewers()
+        }
+
+        // Touch listener for navigation
+        var x1 = 0f
+        var x2 = 0f
+        imageStoryView.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    x1 = event.x
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    x2 = event.x
+                    val deltaX = x2 - x1
+                    
+                    if (Math.abs(deltaX) > 150) {
+                        if (x2 > x1) {
+                            // Swipe right - previous story
+                            showPreviousStory()
+                        } else {
+                            // Swipe left - next story
+                            showNextStory()
+                        }
+                    } else {
+                        // Tap to close
+                        finish()
+                    }
+                    true
+                }
+                else -> false
+            }
         }
     }
 
@@ -150,6 +176,74 @@ class StoryViewActivity : AppCompatActivity() {
         viewRef.updateChildren(viewMap)
     }
 
+    private fun loadAllStories() {
+        val storiesRef = FirebaseDatabase.getInstance().reference
+            .child("Story").child(storyUserId)
+
+        storiesRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                storyIds.clear()
+                val currentTime = System.currentTimeMillis()
+                
+                for (storySnapshot in snapshot.children) {
+                    val timeEnd = storySnapshot.child("timeend").value.toString().toLongOrNull() ?: 0
+                    if (currentTime < timeEnd) {
+                        storySnapshot.key?.let { storyIds.add(it) }
+                    }
+                }
+
+                // Find the index of the current story
+                currentStoryIndex = storyIds.indexOf(storyId)
+                if (currentStoryIndex == -1) currentStoryIndex = 0
+
+                loadCurrentStory()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@StoryViewActivity, "Error loading stories", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun loadCurrentStory() {
+        if (currentStoryIndex >= storyIds.size) {
+            finish()
+            return
+        }
+
+        storyId = storyIds[currentStoryIndex]
+        
+        loadStory()
+        loadUserInfo()
+        addView()
+
+        // Check if this is the user's own story
+        if (storyUserId == currentUserId) {
+            storyDelete.visibility = View.VISIBLE
+            storyViewCountLayout.visibility = View.VISIBLE
+            loadViewCount()
+        } else {
+            storyDelete.visibility = View.GONE
+            storyViewCountLayout.visibility = View.GONE
+        }
+    }
+
+    private fun showNextStory() {
+        if (currentStoryIndex < storyIds.size - 1) {
+            currentStoryIndex++
+            loadCurrentStory()
+        } else {
+            finish()
+        }
+    }
+
+    private fun showPreviousStory() {
+        if (currentStoryIndex > 0) {
+            currentStoryIndex--
+            loadCurrentStory()
+        }
+    }
+
     private fun loadViewCount() {
         val viewsRef = FirebaseDatabase.getInstance().reference
             .child("Story").child(storyUserId).child(storyId).child("views")
@@ -168,6 +262,15 @@ class StoryViewActivity : AppCompatActivity() {
                 // Handle error
             }
         })
+    }
+
+    private fun showViewers() {
+        val intent = android.content.Intent(this, ShowUsersActivity::class.java)
+        intent.putExtra("id", storyId)
+        intent.putExtra("storyUserId", storyUserId)
+        intent.putExtra("title", "Story Viewers")
+        intent.putExtra("type", "story_views")
+        startActivity(intent)
     }
 
     private fun showDeleteConfirmation() {
