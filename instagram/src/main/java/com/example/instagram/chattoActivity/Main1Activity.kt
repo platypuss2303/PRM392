@@ -13,6 +13,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import com.example.instagram.R
 import com.example.instagram.adapter.chattoAdapter.TabsAccessorAdapter
+import com.example.instagram.socialActivity.SignInActivity
+import com.example.instagram.socialActivity.AccountSettingActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -150,13 +152,13 @@ class Main1Activity : AppCompatActivity() {
     }
 
     private fun sendUserToLoginActivity() {
-        val loginIntent = Intent(this, LoginActivity::class.java)
+        val loginIntent = Intent(this, SignInActivity::class.java)
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(loginIntent)
     }
 
     private fun sendUserToSettingsActivity() {
-        val settingsIntent = Intent(this, SettingsActivity::class.java)
+        val settingsIntent = Intent(this, AccountSettingActivity::class.java)
         startActivity(settingsIntent)
     }
 

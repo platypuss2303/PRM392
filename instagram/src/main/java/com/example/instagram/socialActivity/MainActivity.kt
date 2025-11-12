@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.instagram.R
+import com.example.instagram.chattoActivity.Main1Activity
 import com.example.instagram.fragments.socialFragments.HomeFragment
 import com.example.instagram.fragments.socialFragments.NotificationsFragment
 import com.example.instagram.fragments.socialFragments.ProfileFragment
@@ -51,9 +53,14 @@ class MainActivity : AppCompatActivity() {
 
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        val fabMessage: FloatingActionButton = findViewById(R.id.fab_message)
 
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
 
+        fabMessage.setOnClickListener {
+            val chatIntent = Intent(this@MainActivity, Main1Activity::class.java)
+            startActivity(chatIntent)
+        }
 
         moveToFragment(HomeFragment())
     }
