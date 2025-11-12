@@ -232,7 +232,20 @@ class ProfileFragment : Fragment() {
         usersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (_binding != null && snapshot.exists()) {
-                    val user = snapshot.getValue(User::class.java)
+                    val user = try {
+                        snapshot.getValue(User::class.java)
+                    } catch (e: Exception) {
+                        // Manual parsing if automatic deserialization fails
+                        User().apply {
+                            setUID(snapshot.child("uid").value?.toString() ?: "")
+                            setUsername(snapshot.child("username").value?.toString() ?: "")
+                            setFullname(snapshot.child("fullname").value?.toString() ?: "")
+                            setBio(snapshot.child("bio").value?.toString() ?: "")
+                            setImage(snapshot.child("image").value?.toString() ?: "")
+                            setEmail(snapshot.child("email").value?.toString() ?: "")
+                            setUserState(snapshot.child("userState").value?.toString() ?: "offline")
+                        }
+                    }
                     user?.let {
                         Picasso.get()
                             .load(it.getImage())
