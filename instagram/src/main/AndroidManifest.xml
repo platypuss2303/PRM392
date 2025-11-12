@@ -10,19 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Instagram">
         <activity
-            android:name=".ShowUsersActivity"
+            android:name=".socialActivity.ShowUsersActivity"
             android:exported="false" />
         <activity
-            android:name=".CommentsActivity"
+            android:name=".socialActivity.CommentsActivity"
             android:exported="false" />
         <activity
-            android:name=".AddPostActivity"
+            android:name=".socialActivity.AddPostActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".socialActivity.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".SignInActivity"
+            android:name=".socialActivity.SignInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,10 +31,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AccountSettingActivity"
+            android:name=".socialActivity.AccountSettingActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".socialActivity.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Instagram" />
