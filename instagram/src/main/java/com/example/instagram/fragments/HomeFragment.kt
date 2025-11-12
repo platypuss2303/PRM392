@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.R
 import com.example.instagram.adapter.PostAdapter
+import com.example.instagram.adapter.StoryAdapter
 import com.example.instagram.model.Post
+import com.example.instagram.model.Story
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,7 +26,11 @@ import com.google.firebase.database.ValueEventListener
 class HomeFragment : Fragment() {
     private var postAdapter: PostAdapter? = null
     private var postList: MutableList<Post>? = null
-    private var followingList: MutableList<Post>? = null
+    private var followingList: MutableList<String>? = null
+
+    private var storyAdapter: StoryAdapter? = null
+    private var storyList: MutableList<Story>? = null
+
 
 
     override fun onCreateView(
@@ -41,11 +47,21 @@ class HomeFragment : Fragment() {
         linearLayoutManager.stackFromEnd = true
         recyclerView.layoutManager = linearLayoutManager
 
+        var recyclerViewStory: RecyclerView? = null
+        recyclerViewStory = view.findViewById(R.id.recycler_view_story)
+        val linearLayoutManager2 = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+       linearLayoutManager2.reverseLayout = true
+        linearLayoutManager2.stackFromEnd = true
+        recyclerViewStory.layoutManager = linearLayoutManager2
 
 
         postList = ArrayList()
         postAdapter = context?.let {PostAdapter(it, postList as ArrayList<Post>) }
         recyclerView.adapter = postAdapter
+
+        storyList = ArrayList()
+        storyAdapter = context?.let {StoryAdapter(it, storyList as ArrayList<Story>) }
+        recyclerViewStory.adapter = storyAdapter
 
         checkFollowings()
 
@@ -67,15 +83,47 @@ class HomeFragment : Fragment() {
                         snapshot.key?.let { (followingList as ArrayList<String>).add(it) }
                     }
                     retrievePots()
+                    retrieveStories()
                 }
+            }
+
+            private fun retrieveStories() {
+                val storyRef = FirebaseDatabase.getInstance().reference
+                    .child("Story")
+
+                storyRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val timecurrent = System.currentTimeMillis()
+                        (storyList as ArrayList<Story>).clear()
+                        (storyList as ArrayList<Story>).add(Story("", 0, "", "", 0))
+                        for (id in followingList!!) {
+                            var countStory = 0
+                            var story: Story? = null
+                            for (snapshot in p0.child(id.toString()).children) {
+                                story = snapshot.getValue(Story::class.java)
+                                if(timecurrent > story!!.getTimestart() && timecurrent<story!!.getTimeend()){
+                                    countStory++
+                                }
+                            }
+                            if(countStory>0){
+                                (storyList as ArrayList<Story>).add(story!!)
+                            }
+                        }
+                        storyAdapter!!.notifyDataSetChanged()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        // Handle database error if needed
+                    }
+                })
             }
 
             override fun onCancelled(error: DatabaseError) {
                 // Handle database error if needed
             }
         })
-
-        }
+    }
+    
     private fun retrievePots(){
         val postsRef = FirebaseDatabase.getInstance().reference
             .child("Posts")
