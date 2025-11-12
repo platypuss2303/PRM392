@@ -1,0 +1,178 @@
+package com.example.instagram.chattoActivity
+
+import android.os.Bundle
+import android.text.TextUtils
+import android.view.View
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ScrollView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
+import java.util.Calendar
+
+class GroupChatActivity : AppCompatActivity() {
+    private var mToolbar: Toolbar? = null
+    private var SendMessageButton: ImageButton? = null
+    private var userMessageInput: EditText? = null
+    private var mScrollView: ScrollView? = null
+    private var displayTextMessages: TextView? = null
+
+    private var mAuth: FirebaseAuth? = null
+    private var UsersRef: DatabaseReference? = null
+    private var GroupNameRef: DatabaseReference? = null
+    private var GroupMessageKeyRef: DatabaseReference? = null
+
+    private var currentGroupName: String? = null
+    private var currentUserID: String? = null
+    private var currentUserName: String? = null
+    private var currentDate: String? = null
+    private var currentTime: String? = null
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_group_chat)
+
+
+
+        currentGroupName = getIntent().getExtras()!!.get("groupName").toString()
+        Toast.makeText(this@GroupChatActivity, currentGroupName, Toast.LENGTH_SHORT).show()
+
+
+        mAuth = FirebaseAuth.getInstance()
+        currentUserID = mAuth!!.getCurrentUser()!!.getUid()
+        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users")
+        GroupNameRef = FirebaseDatabase.getInstance().getReference().child("Groups").child(
+            currentGroupName!!
+        )
+
+
+
+        InitializeFields()
+
+
+        GetUserInfo()
+
+
+        SendMessageButton!!.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                SaveMessageInfoToDatabase()
+
+                userMessageInput!!.setText("")
+
+                mScrollView!!.fullScroll(ScrollView.FOCUS_DOWN)
+            }
+        })
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+
+        GroupNameRef!!.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+                if (dataSnapshot.exists()) {
+                    DisplayMessages(dataSnapshot)
+                }
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
+                if (dataSnapshot.exists()) {
+                    DisplayMessages(dataSnapshot)
+                }
+            }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot?) {
+            }
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot?, s: String?) {
+            }
+
+            override fun onCancelled(databaseError: DatabaseError?) {
+            }
+        })
+    }
+
+
+    private fun InitializeFields() {
+        mToolbar = findViewById<View?>(R.id.group_chat_bar_layout) as Toolbar?
+        setSupportActionBar(mToolbar)
+        getSupportActionBar()!!.setTitle(currentGroupName)
+
+        SendMessageButton = findViewById<View?>(R.id.send_message_button) as ImageButton
+        userMessageInput = findViewById<View?>(R.id.input_group_message) as EditText
+        displayTextMessages = findViewById<View?>(R.id.group_chat_text_display) as TextView
+        mScrollView = findViewById<View?>(R.id.my_scroll_view) as ScrollView
+    }
+
+
+    private fun GetUserInfo() {
+        UsersRef!!.child(currentUserID!!).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    currentUserName = dataSnapshot.child("name").getValue().toString()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError?) {
+            }
+        })
+    }
+
+
+    private fun SaveMessageInfoToDatabase() {
+        val message = userMessageInput!!.getText().toString()
+        val messagekEY = GroupNameRef!!.push().getKey()
+
+        if (TextUtils.isEmpty(message)) {
+            Toast.makeText(this, "Please write message first...", Toast.LENGTH_SHORT).show()
+        } else {
+            val calForDate = Calendar.getInstance()
+            val currentDateFormat = SimpleDateFormat("MMM dd, yyyy")
+            currentDate = currentDateFormat.format(calForDate.getTime())
+
+            val calForTime = Calendar.getInstance()
+            val currentTimeFormat = SimpleDateFormat("hh:mm a")
+            currentTime = currentTimeFormat.format(calForTime.getTime())
+
+
+            val groupMessageKey = HashMap<String?, Any?>()
+            GroupNameRef!!.updateChildren(groupMessageKey)
+
+            GroupMessageKeyRef = GroupNameRef!!.child(messagekEY!!)
+
+            val messageInfoMap = HashMap<String?, Any?>()
+            messageInfoMap.put("name", currentUserName)
+            messageInfoMap.put("message", message)
+            messageInfoMap.put("date", currentDate)
+            messageInfoMap.put("time", currentTime)
+            GroupMessageKeyRef!!.updateChildren(messageInfoMap)
+        }
+    }
+
+
+    private fun DisplayMessages(dataSnapshot: DataSnapshot) {
+        val iterator: MutableIterator<*> = dataSnapshot.getChildren().iterator()
+
+        while (iterator.hasNext()) {
+            val chatDate = (iterator.next() as DataSnapshot).getValue() as String?
+            val chatMessage = (iterator.next() as DataSnapshot).getValue() as String?
+            val chatName = (iterator.next() as DataSnapshot).getValue() as String?
+            val chatTime = (iterator.next() as DataSnapshot).getValue() as String?
+
+            displayTextMessages!!.append(chatName + " :\n" + chatMessage + "\n" + chatTime + "     " + chatDate + "\n\n\n")
+
+            mScrollView!!.fullScroll(ScrollView.FOCUS_DOWN)
+        }
+    }
+}
