@@ -1,4 +1,4 @@
-rootProject.name = "instagram"
+rootProject.name = "Chatto"
 
 pluginManagement {
     repositories {

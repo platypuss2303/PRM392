@@ -55,10 +55,22 @@ class AddPostActivity : AppCompatActivity() {
 
         storagePostPicRef = FirebaseStorage.getInstance().reference.child("Post Pictures")
 
+        // Close button
+        binding.closeAddPostBtn.setOnClickListener {
+            finish()
+        }
+
+        // Post button (in toolbar)
         binding.saveNewPostBtn.setOnClickListener {
             uploadImage()
         }
 
+        // Select image button
+        binding.selectImageBtn.setOnClickListener {
+            imagePickerLauncher.launch("image/*")
+        }
+
+        // Image preview click
         binding.imagePost.setOnClickListener {
             imagePickerLauncher.launch("image/*")
         }

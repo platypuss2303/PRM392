@@ -80,21 +80,17 @@ class ProfileFragment : Fragment() {
         }
         recyclerViewSavedImages.adapter = myImagesAdapterSavedImg
 
-        var uploadedImagesBtn: ImageButton
-        uploadedImagesBtn = binding.imagesGridViewBtn
-        uploadedImagesBtn.setOnClickListener {
-            recyclerViewUpLoadImages.visibility = View.VISIBLE
-            recyclerViewSavedImages.visibility = View.GONE
+        // Grid view button
+        binding.imagesGridViewBtn.setOnClickListener {
+            binding.recyclerViewUploadPic.visibility = View.VISIBLE
+            binding.recyclerViewSavedPic.visibility = View.GONE
         }
 
-        var savedImagesBtn: ImageButton
-        savedImagesBtn = binding.imagesSaveBtn
-        savedImagesBtn.setOnClickListener {
-            recyclerViewUpLoadImages.visibility = View.GONE
-            recyclerViewSavedImages.visibility = View.VISIBLE
+        // Saved images button
+        binding.imagesSaveBtn.setOnClickListener {
+            binding.recyclerViewUploadPic.visibility = View.GONE
+            binding.recyclerViewSavedPic.visibility = View.VISIBLE
         }
-
-
 
         binding.editAccountSettingsBtn.setOnClickListener {
             val buttonText = binding.editAccountSettingsBtn.text.toString()

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_small"
+    android:layout_marginEnd="@dimen/margin_small"
+    android:layout_marginTop="@dimen/margin_xsmall"
+    android:layout_marginBottom="@dimen/margin_xsmall"
+    app:cardCornerRadius="@dimen/corner_radius_medium"
+    app:cardElevation="@dimen/elevation_xsmall"
+    app:cardBackgroundColor="@color/white"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium"
+        android:gravity="center_vertical">
+
+        <!-- User Avatar -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/divider">
+
+            <ImageView
+                android:id="@+id/notification_user_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile"
+                android:contentDescription="User Avatar" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Notification Content -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_medium">
+
+            <!-- Username and Action -->
+            <TextView
+                android:id="@+id/notification_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="username liked your post"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:fontFamily="sans-serif"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <!-- Time -->
+            <TextView
+                android:id="@+id/notification_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2 hours ago"
+                android:textSize="12sp"
+                android:textColor="@color/text_tertiary"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+
+        <!-- Post Thumbnail (optional, for post-related notifications) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/notification_post_image_container"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:cardCornerRadius="@dimen/corner_radius_small"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/divider"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/notification_post_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile"
+                android:contentDescription="Post Image" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Follow Button (optional, for follow notifications) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/notification_follow_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:text="Follow"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="@dimen/padding_medium"
+            android:paddingEnd="@dimen/padding_medium"
+            android:visibility="gone"
+            app:cornerRadius="@dimen/corner_radius_small"
+            app:backgroundTint="@color/primary"
+            style="@style/Widget.MaterialComponents.Button" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

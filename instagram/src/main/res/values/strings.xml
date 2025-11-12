@@ -1,5 +1,50 @@
 <resources>
-    <string name="app_name">instagram</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">Chatto</string>
+    
+    <!-- Authentication -->
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="full_name">Full Name</string>
+    <string name="bio">Bio</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="create_account">Create Account</string>
+    <string name="login">Login</string>
+    
+    <!-- Main Navigation -->
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="add_post">Add Post</string>
+    <string name="notifications">Notifications</string>
+    <string name="profile">Profile</string>
+    
+    <!-- Profile -->
+    <string name="edit_profile">Edit Profile</string>
+    <string name="follow">Follow</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="posts">Posts</string>
+    <string name="saved">Saved</string>
+    
+    <!-- Post -->
+    <string name="add_new_post">Add New Post</string>
+    <string name="description">Description</string>
+    <string name="post">Post</string>
+    <string name="save">Save</string>
+    <string name="comment">Comment</string>
+    <string name="like">Like</string>
+    <string name="share">Share</string>
+    
+    <!-- Messages -->
+    <string name="welcome_to_chatto">Welcome to Chatto</string>
+    <string name="connect_share_enjoy">Connect, Share, and Enjoy!</string>
+    <string name="loading">Loading…</string>
+    <string name="error_occurred">An error occurred</string>
+    
+    <!-- Placeholders -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,49 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_light"
     tools:context=".AddPostActivity">
 
+    <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout_add_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/app_bar_layout_add_post"
-        android:background="@android:color/white"
-        >
+        android:background="@color/primary"
+        android:elevation="4dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/add_post_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:background="@android:color/white"
-            >
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/primary">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/close_add_post_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/close"
-                    />
+                    android:contentDescription="Close"
+                    android:padding="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:tint="@color/white" />
 
-                <ImageView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_new_post"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_centerInParent="true" />
+
+                <TextView
                     android:id="@+id/save_new_post_btn"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:src="@drawable/save_edited_info"
-                    />
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:text="Post"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Post" />
 
             </RelativeLayout>
 
@@ -51,28 +72,192 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <!-- Content -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/app_bar_layout_add_post"
-        >
-<ImageView
-    android:id="@+id/image_post"
-    android:layout_width="match_parent"
-    android:layout_height="250dp"
-    android:scaleType="centerCrop"
-    android:src="@drawable/add_image_icon"
-    />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <EditText
-        android:id="@+id/description_post"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-            android:maxLines="6"
-        android:hint="say something"
-        />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium">
 
-</RelativeLayout>
+            <!-- Image Preview Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/corner_radius_large"
+                app:cardElevation="@dimen/elevation_small"
+                app:cardBackgroundColor="@color/white"
+                app:strokeWidth="0dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp">
+
+                    <!-- Image Preview -->
+                    <ImageView
+                        android:id="@+id/image_post"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:background="@color/surface_variant"
+                        android:contentDescription="Select Image" />
+
+                    <!-- Overlay for empty state -->
+                    <LinearLayout
+                        android:id="@+id/empty_image_overlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@color/surface_variant"
+                        android:padding="@dimen/padding_xlarge">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/add_image_icon"
+                            android:contentDescription="Add Image"
+                            app:tint="@color/text_tertiary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select an image"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_secondary"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginTop="@dimen/margin_medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tap the button below to choose"
+                            android:textSize="14sp"
+                            android:textColor="@color/text_tertiary"
+                            android:layout_marginTop="4dp" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Select Image Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/select_image_btn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Choose from Gallery"
+                android:textSize="15sp"
+                android:textAllCaps="false"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginTop="@dimen/margin_medium"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                app:strokeColor="@color/primary"
+                app:strokeWidth="2dp"
+                app:cornerRadius="@dimen/corner_radius_medium"
+                app:icon="@drawable/add_image_icon"
+                app:iconTint="@color/primary"
+                app:iconSize="20dp"
+                app:iconGravity="textStart" />
+
+            <!-- Description Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                app:cardCornerRadius="@dimen/corner_radius_large"
+                app:cardElevation="@dimen/elevation_small"
+                app:cardBackgroundColor="@color/white"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_large">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="@dimen/margin_medium">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/save_edited_info"
+                            app:tint="@color/primary"
+                            android:contentDescription="Description" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/description"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginStart="@dimen/margin_small" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="0dp"
+                        app:boxBackgroundMode="none"
+                        app:hintEnabled="false">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/description_post"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minLines="5"
+                            android:maxLines="10"
+                            android:gravity="top|start"
+                            android:hint="Share your thoughts..."
+                            android:textColorHint="@color/text_tertiary"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:textSize="15sp"
+                            android:textColor="@color/text_primary"
+                            android:fontFamily="sans-serif"
+                            android:background="@null"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Post Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/post_button"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="@string/post"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginTop="@dimen/margin_xlarge"
+                android:layout_marginBottom="@dimen/margin_medium"
+                style="@style/Widget.Material3.Button"
+                app:backgroundTint="@color/primary"
+                app:cornerRadius="@dimen/corner_radius_medium"
+                app:icon="@android:drawable/ic_menu_upload"
+                app:iconTint="@color/white"
+                app:iconSize="20dp"
+                app:iconGravity="textStart" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

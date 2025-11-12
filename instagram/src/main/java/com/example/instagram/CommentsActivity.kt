@@ -52,6 +52,11 @@ class CommentsActivity : AppCompatActivity() {
         readComments()
         getPostImage()
         
+        // Back button handler
+        binding.backBtnComments.setOnClickListener {
+            finish()
+        }
+        
         binding.postComment.setOnClickListener {
             if (binding.addComment.text.toString().trim().isEmpty()) {
                 Toast.makeText(this@CommentsActivity, "Please write comment first.", Toast.LENGTH_LONG).show()
