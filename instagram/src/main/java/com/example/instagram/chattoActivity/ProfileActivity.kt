@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.instagram.R
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -40,14 +41,14 @@ class ProfileActivity : AppCompatActivity() {
 
 
         mAuth = FirebaseAuth.getInstance()
-        UserRef = FirebaseDatabase.getInstance().getReference().child("Users")
-        ChatRequestRef = FirebaseDatabase.getInstance().getReference().child("Chat Requests")
-        ContactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts")
-        NotificationRef = FirebaseDatabase.getInstance().getReference().child("Notifications")
+        UserRef = FirebaseDatabase.getInstance().reference.child("Users")
+        ChatRequestRef = FirebaseDatabase.getInstance().reference.child("Chat Requests")
+        ContactsRef = FirebaseDatabase.getInstance().reference.child("Contacts")
+        NotificationRef = FirebaseDatabase.getInstance().reference.child("Notifications")
 
 
-        receiverUserID = getIntent().getExtras()!!.get("visit_user_id").toString()
-        senderUserID = mAuth!!.getCurrentUser()!!.getUid()
+        receiverUserID = intent.extras!!.get("visit_user_id").toString()
+        senderUserID = mAuth!!.currentUser!!.uid
 
 
         userProfileImage = findViewById<View?>(R.id.visit_profile_image) as CircleImageView?
@@ -67,30 +68,30 @@ class ProfileActivity : AppCompatActivity() {
         UserRef!!.child(receiverUserID!!).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("image"))) {
-                    val userImage = dataSnapshot.child("image").getValue().toString()
-                    val userName = dataSnapshot.child("name").getValue().toString()
-                    val userstatus = dataSnapshot.child("status").getValue().toString()
+                    val userImage = dataSnapshot.child("image").value.toString()
+                    val userName = dataSnapshot.child("name").value.toString()
+                    val userstatus = dataSnapshot.child("status").value.toString()
 
-                    Picasso.get().load(userImage).placeholder(R.drawable.profile_image)
+                    Picasso.get().load(userImage).placeholder(R.drawable.profile)
                         .into(userProfileImage)
-                    userProfileName!!.setText(userName)
-                    userProfileStatus!!.setText(userstatus)
+                    userProfileName!!.text = userName
+                    userProfileStatus!!.text = userstatus
 
 
                     ManageChatRequests()
                 } else {
-                    val userName = dataSnapshot.child("name").getValue().toString()
-                    val userstatus = dataSnapshot.child("status").getValue().toString()
+                    val userName = dataSnapshot.child("name").value.toString()
+                    val userstatus = dataSnapshot.child("status").value.toString()
 
-                    userProfileName!!.setText(userName)
-                    userProfileStatus!!.setText(userstatus)
+                    userProfileName!!.text = userName
+                    userProfileStatus!!.text = userstatus
 
 
                     ManageChatRequests()
                 }
             }
 
-            override fun onCancelled(databaseError: DatabaseError?) {
+            override fun onCancelled(databaseError: DatabaseError) {
             }
         })
     }
@@ -102,18 +103,18 @@ class ProfileActivity : AppCompatActivity() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.hasChild(receiverUserID!!)) {
                         val request_type =
-                            dataSnapshot.child(receiverUserID!!).child("request_type").getValue()
+                            dataSnapshot.child(receiverUserID!!).child("request_type").value
                                 .toString()
 
                         if (request_type == "sent") {
                             Current_State = "request_sent"
-                            SendMessageRequestButton!!.setText("Cancel Chat Request")
+                            SendMessageRequestButton!!.text = "Cancel Chat Request"
                         } else if (request_type == "received") {
                             Current_State = "request_received"
-                            SendMessageRequestButton!!.setText("Accept Chat Request")
+                            SendMessageRequestButton!!.text = "Accept Chat Request"
 
-                            DeclineMessageRequestButton!!.setVisibility(View.VISIBLE)
-                            DeclineMessageRequestButton!!.setEnabled(true)
+                            DeclineMessageRequestButton!!.visibility = View.VISIBLE
+                            DeclineMessageRequestButton!!.isEnabled = true
 
                             DeclineMessageRequestButton!!.setOnClickListener(object :
                                 View.OnClickListener {
@@ -128,17 +129,17 @@ class ProfileActivity : AppCompatActivity() {
                                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                                     if (dataSnapshot.hasChild(receiverUserID!!)) {
                                         Current_State = "friends"
-                                        SendMessageRequestButton!!.setText("Remove this Contact")
+                                        SendMessageRequestButton!!.text = "Remove this Contact"
                                     }
                                 }
 
-                                override fun onCancelled(databaseError: DatabaseError?) {
+                                override fun onCancelled(databaseError: DatabaseError) {
                                 }
                             })
                     }
                 }
 
-                override fun onCancelled(databaseError: DatabaseError?) {
+                override fun onCancelled(databaseError: DatabaseError) {
                 }
             })
 

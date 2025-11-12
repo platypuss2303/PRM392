@@ -43,9 +43,17 @@ class Main1Activity : AppCompatActivity() {
         currentUserID = mAuth.currentUser?.uid ?: ""
         rootRef = FirebaseDatabase.getInstance().reference
 
-        mToolbar = findViewById(R.id.main_page_toolbar)
+        // First get the include container
+        val toolbarContainer = findViewById<androidx.appcompat.widget.Toolbar>(R.id.main_page_toolbar)
+        // Then get the actual toolbar inside
+        mToolbar = toolbarContainer ?: findViewById(R.id.main_app_bar)
+        
         setSupportActionBar(mToolbar)
-        supportActionBar?.title = "WhatsApp"
+        supportActionBar?.apply {
+            title = "WhatsApp"
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
 
         myViewPager = findViewById(R.id.main_tabs_pager)
         myTabsAccessorAdapter = TabsAccessorAdapter(supportFragmentManager)
@@ -85,11 +93,9 @@ class Main1Activity : AppCompatActivity() {
 
         rootRef.child("Users").child(currentUserID).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.child("name").exists()) {
-                    Toast.makeText(this@Main1Activity, "Welcome", Toast.LENGTH_SHORT).show()
-                } else {
-                    sendUserToSettingsActivity()
-                }
+                // Just show welcome toast, don't force settings
+                // User already has profile from Instagram
+                Toast.makeText(this@Main1Activity, "Welcome", Toast.LENGTH_SHORT).show()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -106,6 +112,11 @@ class Main1Activity : AppCompatActivity() {
         super.onOptionsItemSelected(item)
 
         when (item.itemId) {
+            android.R.id.home -> {
+                // Back button clicked
+                finish()
+                return true
+            }
             R.id.main_logout_option -> {
                 updateUserStatus("offline")
                 mAuth.signOut()
@@ -120,7 +131,7 @@ class Main1Activity : AppCompatActivity() {
     }
 
     private fun requestNewGroup() {
-        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
         builder.setTitle("Enter Group Name :")
 
         val groupNameField = EditText(this)

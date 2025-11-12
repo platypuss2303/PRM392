@@ -38,6 +38,7 @@ android {
     buildFeatures {
         compose = true
         viewBinding = true
+        dataBinding = false
     }
 }
 
@@ -73,6 +74,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-messaging")
+    implementation("com.firebaseui:firebase-ui-database:8.0.2")
 
 
     implementation("com.squareup.picasso:picasso:2.8")

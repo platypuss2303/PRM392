@@ -132,10 +132,30 @@ class AccountSettingActivity : AppCompatActivity() {
         usersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    val user = snapshot.getValue(User::class.java)
-                    user?.let {
-                        val imageUrl = it.getImage()
-                        if (!imageUrl.isNullOrBlank()) {
+                    try {
+                        val user = snapshot.getValue(User::class.java)
+                        user?.let {
+                            val imageUrl = it.getImage()
+                            if (!imageUrl.isNullOrBlank()) {
+                                Picasso.get()
+                                    .load(imageUrl)
+                                    .placeholder(R.drawable.ic_launcher_foreground)
+                                    .into(binding.profileImageViewProfileFrag)
+                            } else {
+                                binding.profileImageViewProfileFrag.setImageResource(R.drawable.ic_launcher_foreground)
+                            }
+                            binding.usernameProfileFrag.setText(it.getUsername())
+                            binding.fullNameProfileFrag.setText(it.getFullname())
+                            binding.bioProfileFrag.setText(it.getBio())
+                        }
+                    } catch (e: Exception) {
+                        // Fallback: Parse manually
+                        val imageUrl = snapshot.child("image").value?.toString() ?: ""
+                        val username = snapshot.child("username").value?.toString() ?: ""
+                        val fullname = snapshot.child("fullname").value?.toString() ?: ""
+                        val bio = snapshot.child("bio").value?.toString() ?: ""
+                        
+                        if (imageUrl.isNotEmpty()) {
                             Picasso.get()
                                 .load(imageUrl)
                                 .placeholder(R.drawable.ic_launcher_foreground)
@@ -143,10 +163,9 @@ class AccountSettingActivity : AppCompatActivity() {
                         } else {
                             binding.profileImageViewProfileFrag.setImageResource(R.drawable.ic_launcher_foreground)
                         }
-
-                        binding.usernameProfileFrag.setText(it.getUsername())
-                        binding.fullNameProfileFrag.setText(it.getFullname())
-                        binding.bioProfileFrag.setText(it.getBio())
+                        binding.usernameProfileFrag.setText(username)
+                        binding.fullNameProfileFrag.setText(fullname)
+                        binding.bioProfileFrag.setText(bio)
                     }
                 }
             }

@@ -102,7 +102,20 @@ class NotificationAdapter(
         usersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    val user = snapshot.getValue(User::class.java)
+                    val user = try {
+                        snapshot.getValue(User::class.java)
+                    } catch (e: Exception) {
+                        // Manual parsing if automatic deserialization fails
+                        User().apply {
+                            setUID(snapshot.child("uid").getValue(String::class.java) ?: "")
+                            setUsername(snapshot.child("username").getValue(String::class.java) ?: "")
+                            setFullname(snapshot.child("fullname").getValue(String::class.java) ?: "")
+                            setBio(snapshot.child("bio").getValue(String::class.java) ?: "")
+                            setImage(snapshot.child("image").getValue(String::class.java) ?: "")
+                            setEmail(snapshot.child("email").getValue(String::class.java) ?: "")
+                            setUserState(snapshot.child("userState").getValue(String::class.java) ?: "offline")
+                        }
+                    }
                     user?.let {
                         Picasso.get()
                             .load(it.getImage())

@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.instagram.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -45,14 +46,14 @@ class GroupChatActivity : AppCompatActivity() {
 
 
 
-        currentGroupName = getIntent().getExtras()!!.get("groupName").toString()
+        currentGroupName = intent.extras!!.get("groupName").toString()
         Toast.makeText(this@GroupChatActivity, currentGroupName, Toast.LENGTH_SHORT).show()
 
 
         mAuth = FirebaseAuth.getInstance()
-        currentUserID = mAuth!!.getCurrentUser()!!.getUid()
-        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users")
-        GroupNameRef = FirebaseDatabase.getInstance().getReference().child("Groups").child(
+        currentUserID = mAuth!!.currentUser!!.uid
+        UsersRef = FirebaseDatabase.getInstance().reference.child("Users")
+        GroupNameRef = FirebaseDatabase.getInstance().reference.child("Groups").child(
             currentGroupName!!
         )
 
@@ -92,13 +93,13 @@ class GroupChatActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onChildRemoved(dataSnapshot: DataSnapshot?) {
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
             }
 
-            override fun onChildMoved(dataSnapshot: DataSnapshot?, s: String?) {
+            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
             }
 
-            override fun onCancelled(databaseError: DatabaseError?) {
+            override fun onCancelled(databaseError: DatabaseError) {
             }
         })
     }
@@ -107,7 +108,7 @@ class GroupChatActivity : AppCompatActivity() {
     private fun InitializeFields() {
         mToolbar = findViewById<View?>(R.id.group_chat_bar_layout) as Toolbar?
         setSupportActionBar(mToolbar)
-        getSupportActionBar()!!.setTitle(currentGroupName)
+        supportActionBar!!.title = currentGroupName
 
         SendMessageButton = findViewById<View?>(R.id.send_message_button) as ImageButton
         userMessageInput = findViewById<View?>(R.id.input_group_message) as EditText
@@ -120,38 +121,38 @@ class GroupChatActivity : AppCompatActivity() {
         UsersRef!!.child(currentUserID!!).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    currentUserName = dataSnapshot.child("name").getValue().toString()
+                    currentUserName = dataSnapshot.child("name").value.toString()
                 }
             }
 
-            override fun onCancelled(databaseError: DatabaseError?) {
+            override fun onCancelled(databaseError: DatabaseError) {
             }
         })
     }
 
 
     private fun SaveMessageInfoToDatabase() {
-        val message = userMessageInput!!.getText().toString()
-        val messagekEY = GroupNameRef!!.push().getKey()
+        val message = userMessageInput!!.text.toString()
+        val messagekEY = GroupNameRef!!.push().key
 
         if (TextUtils.isEmpty(message)) {
             Toast.makeText(this, "Please write message first...", Toast.LENGTH_SHORT).show()
         } else {
             val calForDate = Calendar.getInstance()
             val currentDateFormat = SimpleDateFormat("MMM dd, yyyy")
-            currentDate = currentDateFormat.format(calForDate.getTime())
+            currentDate = currentDateFormat.format(calForDate.time)
 
             val calForTime = Calendar.getInstance()
             val currentTimeFormat = SimpleDateFormat("hh:mm a")
-            currentTime = currentTimeFormat.format(calForTime.getTime())
+            currentTime = currentTimeFormat.format(calForTime.time)
 
 
-            val groupMessageKey = HashMap<String?, Any?>()
+            val groupMessageKey = HashMap<String, Any?>()
             GroupNameRef!!.updateChildren(groupMessageKey)
 
             GroupMessageKeyRef = GroupNameRef!!.child(messagekEY!!)
 
-            val messageInfoMap = HashMap<String?, Any?>()
+            val messageInfoMap = HashMap<String, Any?>()
             messageInfoMap.put("name", currentUserName)
             messageInfoMap.put("message", message)
             messageInfoMap.put("date", currentDate)
@@ -162,13 +163,13 @@ class GroupChatActivity : AppCompatActivity() {
 
 
     private fun DisplayMessages(dataSnapshot: DataSnapshot) {
-        val iterator: MutableIterator<*> = dataSnapshot.getChildren().iterator()
+        val iterator: MutableIterator<DataSnapshot> = dataSnapshot.children.iterator()
 
         while (iterator.hasNext()) {
-            val chatDate = (iterator.next() as DataSnapshot).getValue() as String?
-            val chatMessage = (iterator.next() as DataSnapshot).getValue() as String?
-            val chatName = (iterator.next() as DataSnapshot).getValue() as String?
-            val chatTime = (iterator.next() as DataSnapshot).getValue() as String?
+            val chatDate = (iterator.next() as DataSnapshot).value as String?
+            val chatMessage = (iterator.next() as DataSnapshot).value as String?
+            val chatName = (iterator.next() as DataSnapshot).value as String?
+            val chatTime = (iterator.next() as DataSnapshot).value as String?
 
             displayTextMessages!!.append(chatName + " :\n" + chatMessage + "\n" + chatTime + "     " + chatDate + "\n\n\n")
 

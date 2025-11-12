@@ -80,7 +80,7 @@ class ContactsFragment : Fragment() {
                                 holder.userStatus.text = profileStatus
                                 Picasso.get()
                                     .load(userImage)
-                                    .placeholder(R.drawable.profile_image)
+                                    .placeholder(R.drawable.profile)
                                     .into(holder.profileImage)
                             } else {
                                 val profileName = dataSnapshot.child("name").value.toString()

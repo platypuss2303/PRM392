@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.instagram.R
+import com.example.instagram.adapter.chattoAdapter.MessageAdapter
+import com.example.instagram.model.chattoModel.Messages
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -44,7 +47,7 @@ class ChatActivity : AppCompatActivity() {
     private var SendFilesButton: ImageButton? = null
     private var MessageInputText: EditText? = null
 
-    private val messagesList: MutableList<Messages?> = ArrayList<Messages?>()
+    private val messagesList: MutableList<Messages> = ArrayList<Messages>()
     private var linearLayoutManager: LinearLayoutManager? = null
     private var messageAdapter: MessageAdapter? = null
     private var userMessagesList: RecyclerView? = null
@@ -60,20 +63,20 @@ class ChatActivity : AppCompatActivity() {
 
 
         mAuth = FirebaseAuth.getInstance()
-        messageSenderID = mAuth!!.getCurrentUser()!!.getUid()
-        RootRef = FirebaseDatabase.getInstance().getReference()
+        messageSenderID = mAuth!!.currentUser!!.uid
+        RootRef = FirebaseDatabase.getInstance().reference
 
 
-        messageReceiverID = getIntent().getExtras()!!.get("visit_user_id").toString()
-        messageReceiverName = getIntent().getExtras()!!.get("visit_user_name").toString()
-        messageReceiverImage = getIntent().getExtras()!!.get("visit_image").toString()
+        messageReceiverID = intent.extras!!.get("visit_user_id").toString()
+        messageReceiverName = intent.extras!!.get("visit_user_name").toString()
+        messageReceiverImage = intent.extras!!.get("visit_image").toString()
 
 
         IntializeControllers()
 
 
-        userName!!.setText(messageReceiverName)
-        Picasso.get().load(messageReceiverImage).placeholder(R.drawable.profile_image)
+        userName!!.text = messageReceiverName
+        Picasso.get().load(messageReceiverImage).placeholder(R.drawable.profile)
             .into(userImage)
 
 
@@ -92,13 +95,13 @@ class ChatActivity : AppCompatActivity() {
         ChatToolBar = findViewById<View?>(R.id.chat_toolbar) as Toolbar?
         setSupportActionBar(ChatToolBar)
 
-        val actionBar = getSupportActionBar()
+        val actionBar = supportActionBar
         actionBar!!.setDisplayHomeAsUpEnabled(true)
         actionBar.setDisplayShowCustomEnabled(true)
 
         val layoutInflater = this.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val actionBarView: View? = layoutInflater.inflate(R.layout.custom_chat_bar, null)
-        actionBar.setCustomView(actionBarView)
+        actionBar.customView = actionBarView
 
         userName = findViewById<View?>(R.id.custom_profile_name) as TextView
         userLastSeen = findViewById<View?>(R.id.custom_user_last_seen) as TextView
@@ -111,17 +114,17 @@ class ChatActivity : AppCompatActivity() {
         messageAdapter = MessageAdapter(messagesList)
         userMessagesList = findViewById<View?>(R.id.private_messages_list_of_users) as RecyclerView
         linearLayoutManager = LinearLayoutManager(this)
-        userMessagesList!!.setLayoutManager(linearLayoutManager)
-        userMessagesList!!.setAdapter(messageAdapter)
+        userMessagesList!!.layoutManager = linearLayoutManager
+        userMessagesList!!.adapter = messageAdapter
 
 
         val calendar = Calendar.getInstance()
 
         val currentDate = SimpleDateFormat("MMM dd, yyyy")
-        saveCurrentDate = currentDate.format(calendar.getTime())
+        saveCurrentDate = currentDate.format(calendar.time)
 
         val currentTime = SimpleDateFormat("hh:mm a")
-        saveCurrentTime = currentTime.format(calendar.getTime())
+        saveCurrentTime = currentTime.format(calendar.time)
     }
 
 
@@ -131,23 +134,23 @@ class ChatActivity : AppCompatActivity() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.child("userState").hasChild("state")) {
                         val state =
-                            dataSnapshot.child("userState").child("state").getValue().toString()
+                            dataSnapshot.child("userState").child("state").value.toString()
                         val date =
-                            dataSnapshot.child("userState").child("date").getValue().toString()
+                            dataSnapshot.child("userState").child("date").value.toString()
                         val time =
-                            dataSnapshot.child("userState").child("time").getValue().toString()
+                            dataSnapshot.child("userState").child("time").value.toString()
 
                         if (state == "online") {
-                            userLastSeen!!.setText("online")
+                            userLastSeen!!.text = "online"
                         } else if (state == "offline") {
-                            userLastSeen!!.setText("Last Seen: " + date + " " + time)
+                            userLastSeen!!.text = "Last Seen: " + date + " " + time
                         }
                     } else {
-                        userLastSeen!!.setText("offline")
+                        userLastSeen!!.text = "offline"
                     }
                 }
 
-                override fun onCancelled(databaseError: DatabaseError?) {
+                override fun onCancelled(databaseError: DatabaseError) {
                 }
             })
     }
@@ -159,34 +162,36 @@ class ChatActivity : AppCompatActivity() {
         RootRef!!.child("Messages").child(messageSenderID!!).child(messageReceiverID!!)
             .addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                    val messages: Messages? = dataSnapshot.getValue<Messages?>(Messages::class.java)
+                    val messages: Messages? = dataSnapshot.getValue(Messages::class.java)
 
-                    messagesList.add(messages)
+                    if (messages != null) {
+                        messagesList.add(messages)
+                    }
 
-                    messageAdapter.notifyDataSetChanged()
+                    messageAdapter!!.notifyDataSetChanged()
 
                     userMessagesList!!.smoothScrollToPosition(
-                        userMessagesList!!.getAdapter()!!.getItemCount()
+                        userMessagesList!!.adapter!!.itemCount
                     )
                 }
 
-                override fun onChildChanged(dataSnapshot: DataSnapshot?, s: String?) {
+                override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
                 }
 
-                override fun onChildRemoved(dataSnapshot: DataSnapshot?) {
+                override fun onChildRemoved(dataSnapshot: DataSnapshot) {
                 }
 
-                override fun onChildMoved(dataSnapshot: DataSnapshot?, s: String?) {
+                override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
                 }
 
-                override fun onCancelled(databaseError: DatabaseError?) {
+                override fun onCancelled(databaseError: DatabaseError) {
                 }
             })
     }
 
 
     private fun SendMessage() {
-        val messageText = MessageInputText!!.getText().toString()
+        val messageText = MessageInputText!!.text.toString()
 
         if (TextUtils.isEmpty(messageText)) {
             Toast.makeText(this, "first write your message...", Toast.LENGTH_SHORT).show()
@@ -197,9 +202,9 @@ class ChatActivity : AppCompatActivity() {
             val userMessageKeyRef = RootRef!!.child("Messages")
                 .child(messageSenderID!!).child(messageReceiverID!!).push()
 
-            val messagePushID = userMessageKeyRef.getKey()
+            val messagePushID = userMessageKeyRef.key
 
-            val messageTextBody: MutableMap<*, *> = HashMap<Any?, Any?>()
+            val messageTextBody: MutableMap<String, Any?> = HashMap<String, Any?>()
             messageTextBody.put("message", messageText)
             messageTextBody.put("type", "text")
             messageTextBody.put("from", messageSenderID)
@@ -208,14 +213,14 @@ class ChatActivity : AppCompatActivity() {
             messageTextBody.put("time", saveCurrentTime)
             messageTextBody.put("date", saveCurrentDate)
 
-            val messageBodyDetails: MutableMap<*, *> = HashMap<Any?, Any?>()
+            val messageBodyDetails: MutableMap<String, Any> = HashMap<String, Any>()
             messageBodyDetails.put(messageSenderRef + "/" + messagePushID, messageTextBody)
             messageBodyDetails.put(messageReceiverRef + "/" + messagePushID, messageTextBody)
 
-            RootRef!!.updateChildren(messageBodyDetails)
-                .addOnCompleteListener(object : OnCompleteListener<Any?> {
-                    override fun onComplete(task: Task<*>) {
-                        if (task.isSuccessful()) {
+            RootRef!!.updateChildren(messageBodyDetails as Map<String, Any>)
+                .addOnCompleteListener(object : OnCompleteListener<Void> {
+                    override fun onComplete(task: Task<Void>) {
+                        if (task.isSuccessful) {
                             Toast.makeText(
                                 this@ChatActivity,
                                 "Message Sent Successfully...",

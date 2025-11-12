@@ -6,16 +6,17 @@ class User {
     private var bio: String = ""
     private var image: String = ""
     private var uid: String = ""
+    private var email: String = ""
+    private var userState: String = ""
 
-    constructor(
-    )
+    constructor()
+    
     constructor(username: String, fullname: String, bio: String, image: String, uid: String) {
         this.username = username
         this.fullname = fullname
         this.bio = bio
         this.image = image
         this.uid = uid
-
     }
     fun getUsername(): String {
         return username
@@ -57,4 +58,19 @@ class User {
         this.uid = uid
     }
 
+    fun getEmail(): String {
+        return email
+    }
+
+    fun setEmail(email: String) {
+        this.email = email
+    }
+
+    fun getUserState(): String {
+        return userState
+    }
+
+    fun setUserState(userState: String) {
+        this.userState = userState
+    }
 }

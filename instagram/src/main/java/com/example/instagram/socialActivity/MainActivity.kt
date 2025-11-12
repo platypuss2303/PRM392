@@ -58,8 +58,8 @@ class MainActivity : AppCompatActivity() {
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
 
         fabMessage.setOnClickListener {
-            val chatIntent = Intent(this@MainActivity, Main1Activity::class.java)
-            startActivity(chatIntent)
+            val intent = Intent(this@MainActivity, Main1Activity::class.java)
+            startActivity(intent)
         }
 
         moveToFragment(HomeFragment())

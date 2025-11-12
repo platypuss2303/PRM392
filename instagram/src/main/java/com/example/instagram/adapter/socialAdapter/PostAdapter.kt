@@ -213,11 +213,24 @@ addNotification(post.getPublisher(), post.getPostid())
         userRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.exists()) {
-                    val user = p0.getValue(User::class.java)
-                    if (user != null) {
-                        Picasso.get().load(user.getImage()).placeholder(R.drawable.profile).into(profileImage)
-                        userName.text = user.getUsername()
-                        publisher.text = user.getFullname()
+                    try {
+                        val user = p0.getValue(User::class.java)
+                        if (user != null) {
+                            Picasso.get().load(user.getImage()).placeholder(R.drawable.profile).into(profileImage)
+                            userName.text = user.getUsername()
+                            publisher.text = user.getFullname()
+                        }
+                    } catch (e: Exception) {
+                        // Fallback: Parse manually if automatic conversion fails
+                        val username = p0.child("username").value?.toString() ?: ""
+                        val fullname = p0.child("fullname").value?.toString() ?: ""
+                        val image = p0.child("image").value?.toString() ?: ""
+                        
+                        if (image.isNotEmpty()) {
+                            Picasso.get().load(image).placeholder(R.drawable.profile).into(profileImage)
+                        }
+                        userName.text = username
+                        publisher.text = fullname
                     }
                 }
             }
