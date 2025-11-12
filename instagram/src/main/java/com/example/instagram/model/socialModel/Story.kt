@@ -1,4 +1,4 @@
-package com.example.instagram.model
+package com.example.instagram.model.socialModel
 
 class Story {
     private var imageurl: String = ""
@@ -56,4 +56,3 @@ class Story {
         this.userid = userid
     }
 }
-

@@ -1,7 +1,5 @@
-package com.example.instagram
+package com.example.instagram.socialActivity
 
-import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -14,6 +12,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.instagram.R
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -80,7 +79,7 @@ class AddStoryActivity : AppCompatActivity() {
         imagePickerLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+            if (result.resultCode == RESULT_OK && result.data != null) {
                 val data = result.data
                 val selectedImageUri = data?.data
                 if (selectedImageUri != null) {
@@ -95,7 +94,7 @@ class AddStoryActivity : AppCompatActivity() {
         cropLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val resultUri = UCrop.getOutput(result.data!!)
                 if (resultUri != null) {
                     imageUri = resultUri

@@ -1,6 +1,7 @@
-package com.example.instagram.adapter
+package com.example.instagram.adapter.socialAdapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
+import com.example.instagram.socialActivity.AddStoryActivity
 import com.example.instagram.R
-import com.example.instagram.model.Story
+import com.example.instagram.socialActivity.StoryViewActivity
+import com.example.instagram.model.socialModel.Story
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -47,48 +50,48 @@ class StoryAdapter(
           if (currentUserId != null) {
               val userRef = FirebaseDatabase.getInstance().reference
                   .child("Users").child(currentUserId)
-              
+
               userRef.addValueEventListener(object : ValueEventListener {
                   override fun onDataChange(snapshot: DataSnapshot) {
                       if (snapshot.exists()) {
                           val imageUrl = snapshot.child("image").value.toString()
                           val username = snapshot.child("username").value.toString()
-                          
+
                           if (imageUrl.isNotEmpty() && holder.story_image != null) {
                               Picasso.get()
                                   .load(imageUrl)
                                   .placeholder(R.drawable.profile)
                                   .into(holder.story_image!!)
                           }
-                          
+
                           if (username.isNotEmpty()) {
                               holder.addStory_text?.text = username
                           }
                       }
                   }
-                  
+
                   override fun onCancelled(error: DatabaseError) {
                       // Handle error
                   }
               })
           }
-          
+
           // Add story button click
           holder.story_plus_btn?.setOnClickListener {
-              val intent = android.content.Intent(context, com.example.instagram.AddStoryActivity::class.java)
+              val intent = Intent(context, AddStoryActivity::class.java)
               context.startActivity(intent)
           }
-          
+
           holder.itemView.setOnClickListener {
-              val intent = android.content.Intent(context, com.example.instagram.AddStoryActivity::class.java)
+              val intent = Intent(context, AddStoryActivity::class.java)
               context.startActivity(intent)
           }
       } else {
           // View story
           userInfo(holder, story.getUserid())
-          
+
           holder.itemView.setOnClickListener {
-              val intent = android.content.Intent(context, com.example.instagram.StoryViewActivity::class.java)
+              val intent = Intent(context, StoryViewActivity::class.java)
               intent.putExtra("userid", story.getUserid())
               intent.putExtra("storyid", story.getStoryid())
               context.startActivity(intent)
@@ -110,26 +113,26 @@ return 0
     private fun userInfo(holder: ViewHolder, userId: String) {
         val userRef = FirebaseDatabase.getInstance().reference
             .child("Users").child(userId)
-        
+
         userRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     val imageUrl = snapshot.child("image").value.toString()
                     val username = snapshot.child("username").value.toString()
-                    
+
                     if (imageUrl.isNotEmpty() && holder.story_image != null) {
                         Picasso.get()
                             .load(imageUrl)
                             .placeholder(R.drawable.profile)
                             .into(holder.story_image!!)
                     }
-                    
+
                     if (username.isNotEmpty()) {
                         holder.story_username?.text = username
                     }
                 }
             }
-            
+
             override fun onCancelled(error: DatabaseError) {
                 // Handle error
             }
